@@ -1,0 +1,17 @@
+{
+    "name": "Wythe\/logistics",
+    "description": "查询快递物流信息",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "wythe",
+            "email": "wythe.huangw@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Wythe\/Logistics\\": "src"
+        }
+    }
+}
