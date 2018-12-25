@@ -19,14 +19,24 @@ class Logistics
      * @return string
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
      */
-    public function getSendingTime(string $code, string $type = '')
+    public function getSendingTime(string $code, string $type = ''):string
     {
         $logistics = $this->getLogistics($code, $type);
+        $queryName = array_keys($this->queryList);
         $data = [];
-        if ($logistics['data']) {
-            $data = $logistics[count($logistics) - 1];
+        foreach ($queryName as $name) {
+            if (isset($logistics[$name])) {
+                $logisticsInfo = $logistics[$name]['data'];
+                if ($logisticsInfo) {
+                    $data = $logisticsInfo[count($logistics) - 1];
+                }
+            }
+            if ($data['time'] == date('Y-m-d', strtotime($data['time']))) {
+                $data['time'] = strtotime($data['time']);
+            }
+            return $data['time'];
         }
-        return $data['time'];
+        return '';
     }
 
     /**
