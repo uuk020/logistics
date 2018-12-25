@@ -8,7 +8,10 @@
             "email": "wythe.huangw@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "phpunit/phpunit": "^7.5",
+        "mockery/mockery": "^1.2"
+    },
     "autoload": {
         "psr-4": {
             "Wythe\/Logistics\\": "src"
