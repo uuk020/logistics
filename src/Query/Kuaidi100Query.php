@@ -15,6 +15,7 @@ use Wythe\Logistics\Exceptions\InvalidArgumentException;
 
 class Kuaidi100Query extends Query
 {
+    private $autoGetCompanyNameByUrl = 'http://m.kuaidi100.com/autonumber/autoComNum';
     /**
      * 构造函数
      * Kuaidi100Query constructor.
@@ -35,10 +36,9 @@ class Kuaidi100Query extends Query
     public function callInterface(string $code, string $type = ''): array
     {
         try {
-            if (empty($code) || empty($type)) {
-                throw new InvalidArgumentException('$code和$type参数不能为空');
-            }
-            $urlParams = ['type' => $type, 'postid' => $code];
+            $companyCodes = $this->getCompanyCode($code);
+            
+            $urlParams = ['type' => $companyCodes[0], 'postid' => $code];
             $result = $this->format($this->curl($this->url, $urlParams));
             if ($result['response_status'] !== 200) {
                 throw new HttpException($result['message']);
@@ -52,6 +52,21 @@ class Kuaidi100Query extends Query
         } catch (\Exception $exception) {
             throw new HttpException($exception->getMessage());
         }
+    }
+
+    /**
+     * 根据运单号获取物流公司名称
+     *
+     * @param string $code
+     * @return array
+     * @throws HttpException
+     */
+    protected function getCompanyCode(string $code): array
+    {
+        $params = ['resultv2' => 1, 'text' => $code];
+        $response = $this->curl($this->autoGetCompanyNameByUrl, $params);
+        $getCompanyInfo = \json_decode($response, true);
+        return array_column($getCompanyInfo['auto'], 'comCode');
     }
 
     /**

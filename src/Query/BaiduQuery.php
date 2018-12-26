@@ -34,9 +34,6 @@ class BaiduQuery extends Query
     public function callInterface(string $code, string $type = ''): array
     {
         try {
-            if (empty($code)) {
-                throw new InvalidArgumentException('$code参数不能为空');
-            }
             $rand = $this->randNumber();
             $urlParams = [
                 'cb' => 'jQuery1102047' . $rand[0],
@@ -70,7 +67,7 @@ class BaiduQuery extends Query
     protected function format(string $response): array
     {
         $pattern = '/^(jQuery1102047\d{15}_\d+\()({.*})\)$/i';;
-        $response = \preg_replace($pattern, '$1', $response);
+        $response = \preg_replace($pattern, '$2', $response);
         $response = \json_decode($response, true);
         $formatData = [
             'response_status'  => $response['status'],

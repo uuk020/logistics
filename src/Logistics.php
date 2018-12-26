@@ -1,6 +1,7 @@
 <?php
 namespace Wythe\Logistics;
 
+use Wythe\Logistics\Exceptions\InvalidArgumentException;
 use Wythe\Logistics\Exceptions\NoQueryAvailableException;
 
 class Logistics
@@ -45,12 +46,16 @@ class Logistics
      * @param string $code
      * @param string $type
      * @return array
+     * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
      */
     public function getLogistics(string $code, string $type ='')
     {
         $results = [];
         $isSuccessful = false;
+        if (empty($code) || empty($type)) {
+            throw new InvalidArgumentException('$code和$type参数不能为空');
+        }
         foreach ($this->queryList as $key => $class) {
             $results[$key]['from'] = $key;
             try {
