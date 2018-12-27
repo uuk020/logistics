@@ -6,7 +6,7 @@
 ## Installing
 
 ```shell
-$ composer require /ythe/logistics -vvv
+$ composer require /wythe/logistics -vvv
 ```
 
 ## Usage

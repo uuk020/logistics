@@ -23,6 +23,7 @@ class Kuaidi100Query extends Query
     public function __construct()
     {
         $this->url = 'http://m.kuaidi100.com/query';
+        $this->curl = new Curl();
     }
 
     /**
@@ -37,17 +38,21 @@ class Kuaidi100Query extends Query
     {
         try {
             $companyCodes = $this->getCompanyCode($code);
-            
-            $urlParams = ['type' => $companyCodes[0], 'postid' => $code];
-            $result = $this->format($this->curl($this->url, $urlParams));
-            if ($result['response_status'] !== 200) {
-                throw new HttpException($result['message']);
+            $urlParams = $urls = [];
+            foreach ($companyCodes as $companyCode) {
+                $urlParams[] = ['type' => $companyCode, 'postid' => $code];
+                $urls[] = $this->url;
             }
-            $this->response['status'] = 1;
-            $this->response['message'] = 'OK';
-            $this->response['data'] = $result['data'];
-            $this->response['logistics_company'] = $result['logistics_company'];
-            $this->response['logistics_bill_no'] = $result['logistics_bill_no'];
+            $results = $this->format($this->curl->sendRequestWithUrls($urls, $urlParams));
+            foreach ($results as $result) {
+                $this->response[] = [
+                    'status' => $result['response_status'] !== 200 ? 0 : 1,
+                    'message' => $result['response_status'] !== 200 ? $result['message'] : 'OK',
+                    'data' => $result['data'],
+                    'logistics_company' => $result['logistics_company'],
+                    'logistics_bill_no' => $result['logistics_bill_no'],
+                ];
+            }
             return $this->response;
         } catch (\Exception $exception) {
             throw new HttpException($exception->getMessage());
@@ -64,7 +69,7 @@ class Kuaidi100Query extends Query
     protected function getCompanyCode(string $code): array
     {
         $params = ['resultv2' => 1, 'text' => $code];
-        $response = $this->curl($this->autoGetCompanyNameByUrl, $params);
+        $response = $this->curl->sendRequest($this->autoGetCompanyNameByUrl, $params);
         $getCompanyInfo = \json_decode($response, true);
         return array_column($getCompanyInfo['auto'], 'comCode');
     }
@@ -72,20 +77,24 @@ class Kuaidi100Query extends Query
     /**
      * 格式响应数据
      *
-     * @param string $response
+     * @param array $response
      * @return array
      */
-    public function format(string $response): array
+    protected function format($response): array
     {
-        $response = \json_decode($response, true);
-        $formatData = [
-            'response_status'  => $response['status'],
-            'message' => $response['message'],
-            'error_code' => $response['state'] ?? '',
-            'data' => $response['data'] ?? '',
-            'logistics_company' => $response['com'] ?? '',
-            'logistics_bill_no' => $response['nu'] ?? '',
-        ];
+        $formatData = [];
+        foreach ($response as $item) {
+            if (empty($item['error'])) {
+                $formatData[] = [
+                    'response_status'  => $item['result']['status'],
+                    'message' => $item['result']['message'],
+                    'error_code' => $item['result']['state'] ?? '',
+                    'data' => $item['result']['data'] ?? '',
+                    'logistics_company' => $item['result']['com'] ?? '',
+                    'logistics_bill_no' => $item['result']['nu'] ?? '',
+                ];
+            }
+        }
         return $formatData;
     }
 }

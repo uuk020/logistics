@@ -21,6 +21,7 @@ class BaiduQuery extends Query
     public function __construct()
     {
         $this->url = 'https://sp0.baidu.com/9_Q4sjW91Qh3otqbppnN2DJv/pae/channel/data/asyncqury';
+        $this->curl = new Curl();
     }
 
     /**
@@ -44,7 +45,7 @@ class BaiduQuery extends Query
                 'token' => '',
                 '_' => $rand[1]
             ];
-            $result = $this->format($this->curl($this->url, $urlParams, 1));
+            $result = $this->format($this->curl->sendRequest($this->url, $urlParams, 1));
             if ($result['response_status'] !== 0) {
                 throw new HttpException($result['error_code'] . $result['msg']);
             }
@@ -53,6 +54,7 @@ class BaiduQuery extends Query
             $this->response['data'] = $result['data'];
             $this->response['logistics_company'] = $result['logistics_company'];
             $this->response['logistics_bill_no'] = $code;
+            return $this->response;
         } catch (\Exception $exception) {
             throw new HttpException($exception->getMessage());
         }
@@ -61,10 +63,10 @@ class BaiduQuery extends Query
     /**
      * 格式返回响应信息
      *
-     * @param string $response
+     * @param  $response
      * @return array
      */
-    protected function format(string $response): array
+    protected function format($response): array
     {
         $pattern = '/^(jQuery1102047\d{15}_\d+\()({.*})\)$/i';;
         $response = \preg_replace($pattern, '$2', $response);

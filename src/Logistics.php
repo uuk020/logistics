@@ -18,6 +18,7 @@ class Logistics
      * @param string $code
      * @param string $type
      * @return string
+     * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
      */
     public function getSendingTime(string $code, string $type = ''):string
