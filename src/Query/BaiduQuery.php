@@ -11,9 +11,11 @@ namespace Wythe\Logistics\Query;
 
 use Wythe\Logistics\Exceptions\HttpException;
 use Wythe\Logistics\Exceptions\InvalidArgumentException;
+use Wythe\Logistics\Traits\HttpRequest;
 
 class BaiduQuery extends Query
 {
+    use HttpRequest;
     /**
      * 构造函数
      * BaiduQuery constructor.
@@ -21,7 +23,6 @@ class BaiduQuery extends Query
     public function __construct()
     {
         $this->url = 'https://sp0.baidu.com/9_Q4sjW91Qh3otqbppnN2DJv/pae/channel/data/asyncqury';
-        $this->curl = new Curl();
     }
 
     /**
@@ -45,7 +46,7 @@ class BaiduQuery extends Query
                 'token' => '',
                 '_' => $rand[1]
             ];
-            $result = $this->format($this->curl->sendRequest($this->url, $urlParams, 1));
+            $result = $this->format($this->request($this->url, $urlParams, 1));
             if ($result['response_status'] !== 0) {
                 throw new HttpException($result['error_code'] . $result['msg']);
             }

@@ -15,8 +15,6 @@ abstract class Query
 
     protected $url;
 
-    protected $curl;
-
     protected $response;
     /**
      * 调用查询接口

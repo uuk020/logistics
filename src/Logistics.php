@@ -6,39 +6,11 @@ use Wythe\Logistics\Exceptions\NoQueryAvailableException;
 
 class Logistics
 {
+    protected $factory;
 
-    private $queryList = [
-        'baidu' => '\Wythe\Logistics\Query\BaiduQuery',
-        'kuaidi100' => '\Wythe\Logistics\Query\Kuaidi100Query'
-    ];
-
-    /**
-     * 获取发货时间
-     *
-     * @param string $code
-     * @param string $type
-     * @return string
-     * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
-     * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
-     */
-    public function getSendingTime(string $code, string $type = ''):string
+    public function __construct(Factory $factory)
     {
-        $logistics = $this->getLogistics($code, $type);
-        $queryName = array_keys($this->queryList);
-        $data = [];
-        foreach ($queryName as $name) {
-            if (isset($logistics[$name])) {
-                $logisticsInfo = $logistics[$name]['data'];
-                if ($logisticsInfo) {
-                    $data = $logisticsInfo[count($logistics) - 1];
-                }
-            }
-            if ($data['time'] == date('Y-m-d', strtotime($data['time']))) {
-                $data['time'] = strtotime($data['time']);
-            }
-            return $data['time'];
-        }
-        return '';
+        $this->factory = $factory;
     }
 
     /**
@@ -46,28 +18,32 @@ class Logistics
      *
      * @param string $code
      * @param string $type
+     * @param  array $queryList
      * @return array
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
      */
-    public function getLogistics(string $code, string $type ='')
+    public function getLogistics(string $code, string $type ='', array $queryList =[])
     {
         $results = [];
         $isSuccessful = false;
         if (empty($code) || empty($type)) {
             throw new InvalidArgumentException('$code和$type参数不能为空');
         }
-        foreach ($this->queryList as $key => $class) {
-            $results[$key]['from'] = $key;
+        if (empty($queryList)) {
+            $results = $this->factory->query('baidu')->callInterface($code, $type);
+            return $results;
+        }
+        foreach ($queryList as $class) {
+            $results[$class]['from'] = $class;
             try {
-                $results[$key] = (new $class())->callInterface($code, $type);
+                $results[$class] = $this->factory->query($class)->callInterface($code, $type);
                 $isSuccessful = true;
                 break;
             } catch (\Exception $exception) {
-                $results[$key]['exception'] = $exception->getMessage();
+                $results[$class]['exception'] = $exception->getMessage();
             }
         }
-
         if (!$isSuccessful) {
             throw new NoQueryAvailableException($results);
         }

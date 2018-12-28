@@ -2,16 +2,15 @@
 /**
  * Created by PhpStorm.
  * User: WytheHuang
- * Date: 2018/12/27
- * Time: 22:37
+ * Date: 2018/12/28
+ * Time: 22:31
  */
 
-namespace Wythe\Logistics\Query;
-
+namespace Wythe\Logistics\Traits;
 
 use Wythe\Logistics\Exceptions\HttpException;
 
-class Curl
+trait HttpRequest
 {
     /**
      * curl调用(单线程)
@@ -22,7 +21,7 @@ class Curl
      * @return string
      * @throws \Wythe\Logistics\Exceptions\HttpException
      */
-    public function sendRequest($url, $params, int $isPost = 0)
+    protected function request($url, $params, int $isPost = 0)
     {
         $handle = \curl_init();
         $this->setCurlCommonOption($handle);
@@ -85,7 +84,7 @@ class Curl
      * @param int   $isPost
      * @return array
      */
-    public function sendRequestWithUrls(array $urls = [], array $params = [], int $isPost = 0): array
+    protected function requestWithUrls(array $urls = [], array $params = [], int $isPost = 0): array
     {
         $mh = \curl_multi_init();
         $result = $responses = [];

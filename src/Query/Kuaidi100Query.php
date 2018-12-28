@@ -12,9 +12,12 @@ namespace Wythe\Logistics\Query;
 use Wythe\Logistics\Exceptions\Exception;
 use Wythe\Logistics\Exceptions\HttpException;
 use Wythe\Logistics\Exceptions\InvalidArgumentException;
+use Wythe\Logistics\Traits\HttpRequest;
 
 class Kuaidi100Query extends Query
 {
+    use HttpRequest;
+
     private $autoGetCompanyNameByUrl = 'http://m.kuaidi100.com/autonumber/autoComNum';
     /**
      * 构造函数
@@ -23,7 +26,6 @@ class Kuaidi100Query extends Query
     public function __construct()
     {
         $this->url = 'http://m.kuaidi100.com/query';
-        $this->curl = new Curl();
     }
 
     /**
@@ -43,7 +45,7 @@ class Kuaidi100Query extends Query
                 $urlParams[] = ['type' => $companyCode, 'postid' => $code];
                 $urls[] = $this->url;
             }
-            $results = $this->format($this->curl->sendRequestWithUrls($urls, $urlParams));
+            $results = $this->format($this->requestWithUrls($urls, $urlParams));
             foreach ($results as $result) {
                 $this->response[] = [
                     'status' => $result['response_status'] !== 200 ? 0 : 1,
@@ -69,7 +71,7 @@ class Kuaidi100Query extends Query
     protected function getCompanyCode(string $code): array
     {
         $params = ['resultv2' => 1, 'text' => $code];
-        $response = $this->curl->sendRequest($this->autoGetCompanyNameByUrl, $params);
+        $response = $this->request($this->autoGetCompanyNameByUrl, $params);
         $getCompanyInfo = \json_decode($response, true);
         return array_column($getCompanyInfo['auto'], 'comCode');
     }
