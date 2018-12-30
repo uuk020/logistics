@@ -14,9 +14,9 @@ use Wythe\Logistics\Query\Query;
 
 class Factory
 {
-    private $defaultQueryClass;
+    private $default;
 
-    protected $queryList = [];
+    protected $interfaces = [];
 
     /**
      * 获取默认查询类名称
@@ -24,24 +24,25 @@ class Factory
      * @return string
      * @throws \Wythe\Logistics\Exceptions\Exception
      */
-    public function getDefaultQueryClass():string
+    public function getDefaultFactory():string
     {
-        if ($this->defaultQueryClass) {
+        if ($this->default) {
             throw new Exception('No default query class name configured.');
         }
-        return $this->defaultQueryClass;
+        return $this->default;
     }
 
     /**
      * 设置默认查询类名称
      *
      * @param $name
+     * @return $this
      */
-    public function setDefaultQueryClass($name)
+    public function setDefaultFactory($name)
     {
-        $this->defaultQueryClass = $name;
+        $this->default = $name;
+        return $this;
     }
-
 
     /**
      * 数组元素存储查询对象
@@ -50,15 +51,14 @@ class Factory
      * @return mixed
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      */
-    public function query(string $name = '')
+    public function getInstanceWithName(string $name = '')
     {
-        $name = $name ?: $this->defaultQueryClass;
+        $name = $name ?: $this->default;
         if (!isset($this->queryList[$name])) {
-            $this->queryList[$name] = $this->makeQueryObject($name);
+            $this->interfaces[$name] = $this->makeInstance($name);
         }
-        return $this->queryList[$name];
+        return $this->interfaces[$name];
     }
-
 
     /**
      * 实例化查询对象
@@ -67,14 +67,14 @@ class Factory
      * @return mixed
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      */
-    protected function makeQueryObject(string $name)
+    protected function makeInstance(string $name)
     {
         $className = $this->formatClassName($name);
-        $object = new $className();
-        if (!($object instanceof Query)) {
+        $instance = new $className();
+        if (!($instance instanceof Query)) {
             throw new InvalidArgumentException(sprintf('Class "%s" not inherited from %s.', $name, Query::class));
         }
-        return $object;
+        return $instance;
     }
 
     /**
