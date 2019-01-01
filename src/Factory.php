@@ -24,7 +24,7 @@ class Factory
      * @return string
      * @throws \Wythe\Logistics\Exceptions\Exception
      */
-    public function getDefaultFactory():string
+    public function getDefault():string
     {
         if ($this->default) {
             throw new Exception('No default query class name configured.');
@@ -38,7 +38,7 @@ class Factory
      * @param $name
      * @return $this
      */
-    public function setDefaultFactory($name)
+    public function setDefault($name)
     {
         $this->default = $name;
         return $this;
@@ -51,30 +51,21 @@ class Factory
      * @return mixed
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      */
-    public function getInstanceWithName(string $name = '')
+    public function getInstance(string $name = '')
     {
         $name = $name ?: $this->default;
         if (!isset($this->queryList[$name])) {
-            $this->interfaces[$name] = $this->makeInstance($name);
+            $className = $this->formatClassName($name);
+            if (!class_exists($className)) {
+                throw new InvalidArgumentException(sprintf('Class "%s" not exists.', $className));
+            }
+            $instance = new $className();
+            if (!($instance instanceof Query)) {
+                throw new InvalidArgumentException(sprintf('Class "%s" not inherited from %s.', $name, Query::class));
+            }
+            $this->interfaces[$name] = $instance;
         }
         return $this->interfaces[$name];
-    }
-
-    /**
-     * 实例化查询对象
-     *
-     * @param string $name
-     * @return mixed
-     * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
-     */
-    protected function makeInstance(string $name)
-    {
-        $className = $this->formatClassName($name);
-        $instance = new $className();
-        if (!($instance instanceof Query)) {
-            throw new InvalidArgumentException(sprintf('Class "%s" not inherited from %s.', $name, Query::class));
-        }
-        return $instance;
     }
 
     /**

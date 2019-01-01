@@ -28,16 +28,16 @@ class Logistics
         $results = [];
         $isSuccessful = false;
         if (empty($code)) {
-            throw new InvalidArgumentException('$code参数不能为空');
+            throw new InvalidArgumentException('code arguments cannot empty.');
         }
         if (empty($queryList)) {
-            $results = $this->factory->getInstanceWithName('baidu')->callInterface($code, $type);
+            $results = $this->factory->getInstance('baidu')->callInterface($code, $type);
             return $results;
         }
         foreach ($queryList as $class) {
             $results[$class]['from'] = $class;
             try {
-                $results[$class] = $this->factory->getInstanceWithName($class)->callInterface($code, $type);
+                $results[$class] = $this->factory->getInstance($class)->callInterface($code, $type);
                 $isSuccessful = true;
                 break;
             } catch (\Exception $exception) {
@@ -45,7 +45,7 @@ class Logistics
             }
         }
         if (!$isSuccessful) {
-            throw new NoQueryAvailableException('全部接口获取失败!');
+            throw new NoQueryAvailableException('sorry! no query class available');
         }
         return $results;
     }

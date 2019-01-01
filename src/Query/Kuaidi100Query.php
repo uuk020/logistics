@@ -45,16 +45,7 @@ class Kuaidi100Query extends Query
                 $urlParams[] = ['type' => $companyCode, 'postid' => $code];
                 $urls[] = $this->url;
             }
-            $results = $this->format($this->requestWithUrls($urls, $urlParams));
-            foreach ($results as $result) {
-                $this->response[] = [
-                    'status' => $result['response_status'] !== 200 ? 0 : 1,
-                    'message' => $result['response_status'] !== 200 ? $result['message'] : 'OK',
-                    'data' => $result['data'],
-                    'logistics_company' => $result['logistics_company'],
-                    'logistics_bill_no' => $result['logistics_bill_no'],
-                ];
-            }
+            $this->format($this->requestWithUrls($urls, $urlParams));
             return $this->response;
         } catch (\Exception $exception) {
             throw new HttpException($exception->getMessage());
@@ -82,12 +73,11 @@ class Kuaidi100Query extends Query
      * @param array $response
      * @return array
      */
-    protected function format($response): array
+    protected function format($response): void
     {
-        $formatData = [];
         foreach ($response as $item) {
             if (empty($item['error'])) {
-                $formatData[] = [
+                $this->response[] = [
                     'response_status'  => $item['result']['status'],
                     'message' => $item['result']['message'],
                     'error_code' => $item['result']['state'] ?? '',
@@ -97,6 +87,5 @@ class Kuaidi100Query extends Query
                 ];
             }
         }
-        return $formatData;
     }
 }

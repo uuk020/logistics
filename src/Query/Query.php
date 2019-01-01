@@ -29,7 +29,7 @@ abstract class Query
      * 格式响应信息
      *
      * @param string|array $response
-     * @return array
+     * @return void
      */
-    abstract protected function format($response):array;
+    abstract protected function format($response):void;
 }

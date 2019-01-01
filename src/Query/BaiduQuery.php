@@ -46,15 +46,7 @@ class BaiduQuery extends Query
                 'token' => '',
                 '_' => $rand[1]
             ];
-            $result = $this->format($this->request($this->url, $urlParams, 1));
-            if ($result['response_status'] !== 0) {
-                throw new HttpException($result['error_code'] . $result['msg']);
-            }
-            $this->response['status'] = 1;
-            $this->response['message'] = 'OK';
-            $this->response['data'] = $result['data'];
-            $this->response['logistics_company'] = $result['logistics_company'];
-            $this->response['logistics_bill_no'] = $code;
+            $this->format($this->request($this->url, $urlParams, 1));
             return $this->response;
         } catch (\Exception $exception) {
             throw new HttpException($exception->getMessage());
@@ -65,21 +57,20 @@ class BaiduQuery extends Query
      * 格式返回响应信息
      *
      * @param  $response
-     * @return array
+     * @return void
      */
-    protected function format($response): array
+    protected function format($response): void
     {
-        $pattern = '/^(jQuery1102047\d{15}_\d+\()({.*})\)$/i';;
+        $pattern = '/(jQuery1102047\d{15}_\d+\()({.*})\)$/i';;
         $response = \preg_replace($pattern, '$2', $response);
         $response = \json_decode($response, true);
-        $formatData = [
+        $this->response = [
             'response_status'  => $response['status'],
             'message' => $response['msg'],
             'error_code' => $response['error_code'] ?? '',
             'data' => $response['data']['info']['context'] ?? '',
             'logistics_company' => $response['com'] ?? '',
         ];
-        return $formatData;
     }
 
     /**
