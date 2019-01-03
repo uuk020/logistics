@@ -46,7 +46,7 @@ class BaiduQuery extends Query
                 'token' => '',
                 '_' => $rand[1]
             ];
-            $this->format($this->request($this->url, $urlParams, 1));
+            $this->format($this->request($this->url, $urlParams));
             return $this->response;
         } catch (\Exception $exception) {
             throw new HttpException($exception->getMessage());
@@ -61,16 +61,25 @@ class BaiduQuery extends Query
      */
     protected function format($response): void
     {
-        $pattern = '/(jQuery1102047\d{15}_\d+\()({.*})\)$/i';;
-        $response = \preg_replace($pattern, '$2', $response);
-        $response = \json_decode($response, true);
-        $this->response = [
-            'response_status'  => $response['status'],
-            'message' => $response['msg'],
-            'error_code' => $response['error_code'] ?? '',
-            'data' => $response['data']['info']['context'] ?? '',
-            'logistics_company' => $response['com'] ?? '',
-        ];
+        $pattern = '/(jQuery1102047\d{15}_\d+\()({.*})\)$/i';
+        if (preg_match($pattern, $response, $match)) {
+            $response = \json_decode($match[2], true);
+            $this->response = [
+                'status'  => $response['status'],
+                'message' => $response['msg'],
+                'error_code' => $response['error_code'] ?? '',
+                'data' => $response['data']['info']['context'] ?? '',
+                'logistics_company' => $response['com'] ?? '',
+            ];
+        } else {
+            $this->response = [
+                'status' => -1,
+                'message' => '查询不到数据',
+                'error_code' => -1,
+                'data' => '',
+                'logistics_company' => ''
+            ];
+        }
     }
 
     /**

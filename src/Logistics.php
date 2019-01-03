@@ -31,13 +31,13 @@ class Logistics
             throw new InvalidArgumentException('code arguments cannot empty.');
         }
         if (empty($queryList)) {
-            $results = $this->factory->getInstance('baidu')->callInterface($code, $type);
+            $results = $this->factory->getInstance('baidu')->callInterface($code);
             return $results;
         }
         foreach ($queryList as $class) {
             $results[$class]['from'] = $class;
             try {
-                $results[$class] = $this->factory->getInstance($class)->callInterface($code, $type);
+                $results[$class] = $this->factory->getInstance($class)->callInterface($code);
                 $isSuccessful = true;
                 break;
             } catch (\Exception $exception) {
