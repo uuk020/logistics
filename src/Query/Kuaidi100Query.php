@@ -12,11 +12,9 @@ namespace Wythe\Logistics\Query;
 use Wythe\Logistics\Exceptions\Exception;
 use Wythe\Logistics\Exceptions\HttpException;
 use Wythe\Logistics\Exceptions\InvalidArgumentException;
-use Wythe\Logistics\Traits\HttpRequest;
 
 class Kuaidi100Query extends Query
 {
-    use HttpRequest;
 
     private $autoGetCompanyNameByUrl = 'http://m.kuaidi100.com/autonumber/autoComNum';
     /**

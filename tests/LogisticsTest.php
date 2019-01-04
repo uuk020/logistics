@@ -18,6 +18,13 @@ use Wythe\Logistics\Query\Kuaidi100Query;
 
 class LogisticsTest extends TestCase
 {
+    public function testSetFactoryDefault()
+    {
+        $factory = \Mockery::mock(Factory::class);
+        $factory->setDefault('kuaidi');
+        $this->assertSame('kuaidi', $factory->getDefault());
+    }
+
     public function testGetLogisticsWithInvalidParams()
     {
         $f = new Factory();
@@ -52,14 +59,47 @@ class LogisticsTest extends TestCase
         $this->assertSame($response, $logistics->getLogistics('12312211'));
     }
 
+    // TODO
+    public function testGetCompanyCode()
+    {
+
+    }
+
     public function testGetLogisticsForKuaidi100()
     {
         $response = [
-            [],
-            [],
+            [
+                'status' => 0,
+                'message'  => '',
+                'error_code' => '',
+                'data' => '',
+                'logistics_company' => '',
+                'logistics_bill_no' => ''
+            ],
+            [
+                'status' => 0,
+                'message'  => '',
+                'error_code' => 0,
+                'data' => [
+                    ['time' => '1545444420', 'desc' => '仓库-已签收'],
+                    ['time' => '1545441977', 'desc' => '广东XX服务点'],
+                    ['time' => '1545438199', 'desc' => '广东XX转运中心']
+                ],
+                'logistics_company' => '申通快递',
+                'logistics_bill_no' => '12312211'
+            ],
         ];
         $factory = \Mockery::mock(Factory::class);
         $kuaidi = \Mockery::mock(Kuaidi100Query::class);
-        
+        $kuaidi->shouldReceive('callInterface')->andReturn($response);
+        $factory->shouldReceive('getInstance')->andReturn($kuaidi);
+        $logistics = new Logistics($factory);
+        $this->assertSame($response, $logistics->getLogistics('12312211'));
+    }
+
+    //TODO
+    public function testGetLogisticsBoth()
+    {
+
     }
 }

@@ -11,11 +11,9 @@ namespace Wythe\Logistics\Query;
 
 use Wythe\Logistics\Exceptions\HttpException;
 use Wythe\Logistics\Exceptions\InvalidArgumentException;
-use Wythe\Logistics\Traits\HttpRequest;
 
 class BaiduQuery extends Query
 {
-    use HttpRequest;
     /**
      * 构造函数
      * BaiduQuery constructor.

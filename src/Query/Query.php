@@ -9,9 +9,11 @@
 namespace Wythe\Logistics\Query;
 
 use Wythe\Logistics\Exceptions\HttpException;
+use Wythe\Logistics\Traits\HttpRequest;
 
 abstract class Query
 {
+    use HttpRequest;
 
     protected $url;
 
