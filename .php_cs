@@ -1,6 +1,6 @@
 <?php
 $header = <<<EOF
-This file is part of the /ythe/logistics.
+This file is part of the wythe/logistics.
 
 (c) wythe <wythe.huangw@gmail.com>
 
