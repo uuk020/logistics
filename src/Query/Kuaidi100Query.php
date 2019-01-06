@@ -70,20 +70,20 @@ class Kuaidi100Query extends Query
     /**
      * 格式响应数据
      *
-     * @param array $response
-     * @return array
+     * @param array|string $response
      */
     protected function format($response): void
     {
         foreach ($response as $item) {
-            if (empty($item['error'])) {
+            $data = \json_decode($item['result'], true);
+            if ($data['status'] == 200) {
                 $this->response[] = [
-                    'response_status'  => $item['result']['status'],
-                    'message' => $item['result']['message'],
-                    'error_code' => $item['result']['state'] ?? '',
-                    'data' => $item['result']['data'] ?? '',
-                    'logistics_company' => $item['result']['com'] ?? '',
-                    'logistics_bill_no' => $item['result']['nu'] ?? '',
+                    'status'  => $data['status'],
+                    'message' => $data['message'],
+                    'error_code' => $data['state'] ?? '',
+                    'data' => $data['data'] ?? '',
+                    'logistics_company' => $data['com'] ?? '',
+                    'logistics_bill_no' => $data['nu'] ?? '',
                 ];
             }
         }

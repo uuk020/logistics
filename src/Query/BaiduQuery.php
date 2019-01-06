@@ -35,7 +35,7 @@ class BaiduQuery extends Query
         try {
             $rand = $this->randNumber();
             $urlParams = [
-                'cb' => 'jQuery1102047' . $rand[0],
+                'cb' => 'jQuery1102027' . $rand[0],
                 'appid' => 4001,
                 'com' => '',
                 'nu'=> $code,
@@ -58,7 +58,7 @@ class BaiduQuery extends Query
      */
     protected function format($response): void
     {
-        $pattern = '/(jQuery1102047\d{15}_\d+\()({.*})\)$/i';
+        $pattern = '/(jQuery\d+_\d+\()({.*})\)$/i';
         if (preg_match($pattern, $response, $match)) {
             $response = \json_decode($match[2], true);
             $this->response = [

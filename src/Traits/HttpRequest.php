@@ -91,7 +91,7 @@ trait HttpRequest
         foreach ($urls as $key => $url) {
             $handles[$key] = \curl_init();
             $this->setCurlCommonOption($handles[$key]);
-            $this->setCurlOption($handles[$key], $url, $params[$key], $isPost);
+            $this->setCurlUrlMethod($handles[$key], $url, $params[$key], $isPost);
             \curl_multi_add_handle($mh, $handles[$key]);
         }
         $active = null;
@@ -99,10 +99,9 @@ trait HttpRequest
             while (($mrc = \curl_multi_exec($mh, $active)) == \CURLM_CALL_MULTI_PERFORM) ;
             if ($mrc != \CURLM_OK) break;
             while ($done = \curl_multi_info_read($mh)) {
-                $info = \curl_getinfo($done['handle']);
                 $error = \curl_error($done['handle']);
-                $result[] = \curl_multi_getcontent($done['handle']);
-                $responses[] = compact('info', 'error', 'result');
+                $result = \curl_multi_getcontent($done['handle']);
+                $responses[] = compact( 'error', 'result');
                 \curl_multi_remove_handle($mh, $done['handle']);
                 \curl_close($done['handle']);
             }

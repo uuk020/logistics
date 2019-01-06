@@ -8,9 +8,13 @@ class Logistics
 {
     protected $factory;
 
-    public function __construct(Factory $factory)
+    /**
+     *
+     * Logistics constructor.
+     */
+    public function __construct()
     {
-        $this->factory = $factory;
+        $this->factory = new Factory();
     }
 
     /**
@@ -39,7 +43,7 @@ class Logistics
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
      */
-    public function getLogisticsByArray(string $code, array $queryArray = ['baidu', 'kuaidi100']): array
+    public function getLogisticsByArray(string $code, array $queryArray = ['kuaidi100', 'baidu']): array
     {
         $results = [];
         $isSuccessful = false;
@@ -47,7 +51,6 @@ class Logistics
             throw new InvalidArgumentException('code arguments cannot empty.');
         }
         foreach ($queryArray as $class) {
-            $results[$class]['from'] = $class;
             try {
                 $results[$class]['info'] = $this->factory->getInstance($class)->callInterface($code);
                 $isSuccessful = true;

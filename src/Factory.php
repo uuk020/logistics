@@ -14,7 +14,7 @@ use Wythe\Logistics\Query\Query;
 
 class Factory
 {
-    private $default;
+    private $default = 'baidu';
 
     protected $interfaces = [];
 
