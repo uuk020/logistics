@@ -36,12 +36,10 @@ class Factory
      * 设置默认查询类名称
      *
      * @param $name
-     * @return $this
      */
     public function setDefault($name)
     {
         $this->default = $name;
-        return $this;
     }
 
     /**

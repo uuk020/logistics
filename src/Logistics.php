@@ -49,7 +49,7 @@ class Logistics
         foreach ($queryArray as $class) {
             $results[$class]['from'] = $class;
             try {
-                $results[$class] = $this->factory->getInstance($class)->callInterface($code);
+                $results[$class]['info'] = $this->factory->getInstance($class)->callInterface($code);
                 $isSuccessful = true;
                 break;
             } catch (\Exception $exception) {
