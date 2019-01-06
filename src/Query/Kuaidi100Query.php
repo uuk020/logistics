@@ -30,11 +30,10 @@ class Kuaidi100Query extends Query
      * 调用快递100接口
      *
      * @param string $code
-     * @param string $type
      * @return array
      * @throws \Wythe\Logistics\Exceptions\HttpException
      */
-    public function callInterface(string $code, string $type = ''): array
+    public function callInterface(string $code): array
     {
         try {
             $companyCodes = $this->getCompanyCode($code);
@@ -62,6 +61,9 @@ class Kuaidi100Query extends Query
         $params = ['resultv2' => 1, 'text' => $code];
         $response = $this->request($this->autoGetCompanyNameByUrl, $params);
         $getCompanyInfo = \json_decode($response, true);
+        if (!isset($getCompanyInfo['auto'])) {
+            throw new HttpException('no company code');
+        }
         return array_column($getCompanyInfo['auto'], 'comCode');
     }
 

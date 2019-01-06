@@ -22,10 +22,9 @@ abstract class Query
      * 调用查询接口
      *
      * @param string $code
-     * @param string $type
      * @return array
      */
-    abstract public function callInterface(string $code, string $type = ''):array ;
+    abstract public function callInterface(string $code):array ;
 
     /**
      * 格式响应信息

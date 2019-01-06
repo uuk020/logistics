@@ -27,11 +27,10 @@ class BaiduQuery extends Query
      * 调用百度查询快递链接
      *
      * @param string $code
-     * @param string $type
      * @return array
      * @throws \Wythe\Logistics\Exceptions\HttpException
      */
-    public function callInterface(string $code, string $type = ''): array
+    public function callInterface(string $code): array
     {
         try {
             $rand = $this->randNumber();
