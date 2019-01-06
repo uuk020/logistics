@@ -27,8 +27,7 @@ class LogisticsTest extends TestCase
 
     public function testGetLogisticsWithInvalidParams()
     {
-        $f = new Factory();
-        $l = new Logistics($f);
+        $l = new Logistics();
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('code arguments cannot empty.');
         $l->getLogisticsByName('', '');
@@ -36,8 +35,7 @@ class LogisticsTest extends TestCase
 
     public function testGetLogisticsWithQueryClass()
     {
-        $f = new Factory();
-        $l = new Logistics($f);
+        $l = new Logistics();
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Class "Wythe\Logistics\Query\KuaidiBirdQuery" not exists.');
         $l->getLogisticsByName('123213212', 'kuaidiBird');
@@ -47,7 +45,7 @@ class LogisticsTest extends TestCase
     {
         $response = [
             'status' => 0,
-            'message'  => '',
+            'message'  => 'OK',
             'error_code' => 0,
             'data' => [
                 ['time' => '1545444420', 'desc' => '仓库-已签收'],
@@ -56,11 +54,8 @@ class LogisticsTest extends TestCase
             ],
             'logistics_company' => '申通快递',
         ];
-        $factory = \Mockery::mock(Factory::class);
-        $baidu = \Mockery::mock(BaiduQuery::class);
-        $baidu->shouldReceive('callInterface')->andReturn($response);
-        $factory->shouldReceive('getInstance')->andReturn($baidu);
-        $logistics = new Logistics($factory);
+        $logistics = \Mockery::mock(Logistics::class);
+        $logistics->shouldReceive('getLogisticsByName')->andReturn($response);
         $this->assertSame($response, $logistics->getLogisticsByName('12312211', 'baidu'));
     }
 
@@ -68,8 +63,8 @@ class LogisticsTest extends TestCase
     {
         $kuaidiResponse = [
             [
-                'status' => 0,
-                'message'  => '',
+                'status' => 200,
+                'message'  => 'OK',
                 'error_code' => 0,
                 'data' => [
                     ['time' => '1545444420', 'desc' => '仓库-已签收'],
@@ -80,27 +75,22 @@ class LogisticsTest extends TestCase
                 'logistics_bill_no' => '12312211'
             ],
         ];
-        $factory = \Mockery::mock(Factory::class);
-        $kuaidi = \Mockery::mock(Kuaidi100Query::class);
-        $kuaidi->shouldReceive('callInterface')->andReturn($kuaidiResponse);
-        $factory->shouldReceive('getInstance')->andReturn($kuaidi);
-        $logistics = new Logistics($factory);
+        $logistics = \Mockery::mock(Logistics::class);
+        $logistics->shouldReceive('getLogisticsByName')->andReturn($kuaidiResponse);
         $this->assertSame($kuaidiResponse, $logistics->getLogisticsByName('12312211', 'kuaidi100'));
     }
 
     public function testGetLogisticsBoth()
     {
         $response = [
-            [
-                'from' => 'baidu',
+            'baidu' =>[
                 'exception' => '查询不到数据'
             ],
-            [
-                'from' => 'kuaidi100',
+            'kuaidi100' => [
                 'info' => [
                     [
-                        'status' => 0,
-                        'message'  => '',
+                        'status' => 200,
+                        'message'  => 'OK',
                         'error_code' => 0,
                         'data' => [
                             ['time' => '1545444420', 'desc' => '仓库-已签收'],
@@ -113,7 +103,6 @@ class LogisticsTest extends TestCase
                 ]
             ]
         ];
-        $factory = new Factory();
         $logistics = \Mockery::mock(Logistics::class);
         $logistics->shouldReceive('getLogisticsByArray')->andReturn($response);
         $this->assertSame($response, $logistics->getLogisticsByArray('12312211', ['baidu', 'kuaidi100']));
