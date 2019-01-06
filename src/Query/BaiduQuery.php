@@ -44,6 +44,7 @@ class BaiduQuery extends Query
                 '_' => $rand[1]
             ];
             $this->format($this->request($this->url, $urlParams));
+            $this->response['logistics_bill_no'] = $code;
             return $this->response;
         } catch (\Exception $exception) {
             throw new HttpException($exception->getMessage());
