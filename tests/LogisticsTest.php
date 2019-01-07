@@ -20,7 +20,7 @@ class LogisticsTest extends TestCase
 {
     public function testSetFactoryDefault()
     {
-        $factory = \Mockery::mock(Factory::class);
+        $factory = new Factory();
         $factory->setDefault('kuaidi');
         $this->assertSame('kuaidi', $factory->getDefault());
     }
