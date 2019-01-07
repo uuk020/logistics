@@ -2,6 +2,7 @@
 
 <p align="center">无需授权和配置, 简单便捷查询运单快递信息</p>
 
+[![Build Status](https://travis-ci.org/uuk020/logistics.svg?branch=master)](https://travis-ci.org/uuk020/logistics)
 
 ## 环境需求
 * PHP >= 7.0
