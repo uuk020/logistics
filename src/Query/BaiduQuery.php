@@ -57,7 +57,7 @@ class BaiduQuery extends Query
      * @param  $response
      * @return void
      */
-    protected function format($response): void
+    protected function format($response)
     {
         $pattern = '/(jQuery\d+_\d+\()({.*})\)$/i';
         if (preg_match($pattern, $response, $match)) {

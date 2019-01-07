@@ -72,7 +72,7 @@ class Kuaidi100Query extends Query
      *
      * @param array|string $response
      */
-    protected function format($response): void
+    protected function format($response)
     {
         foreach ($response as $item) {
             $data = \json_decode($item['result'], true);

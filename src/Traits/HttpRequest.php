@@ -39,7 +39,7 @@ trait HttpRequest
      *
      * @param resource $handle
      */
-    private function setCurlCommonOption($handle): void
+    private function setCurlCommonOption($handle)
     {
         \curl_setopt($handle, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
         \curl_setopt($handle, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36');

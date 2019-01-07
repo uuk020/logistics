@@ -32,5 +32,5 @@ abstract class Query
      * @param string|array $response
      * @return void
      */
-    abstract protected function format($response):void;
+    abstract protected function format($response);
 }

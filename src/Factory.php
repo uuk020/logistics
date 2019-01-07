@@ -72,7 +72,7 @@ class Factory
      * @param string $name
      * @return string
      */
-    protected function formatClassName(string $name):string
+    protected function formatClassName(string $name): string
     {
         if (class_exists($name)) {
             return $name;
