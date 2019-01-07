@@ -26,7 +26,7 @@ class Factory
      */
     public function getDefault():string
     {
-        if ($this->default) {
+        if (empty($this->default)) {
             throw new Exception('No default query class name configured.');
         }
         return $this->default;
