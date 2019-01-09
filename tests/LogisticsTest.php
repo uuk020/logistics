@@ -13,11 +13,14 @@ use Wythe\Logistics\Exceptions\InvalidArgumentException;
 use Wythe\Logistics\Exceptions\NoQueryAvailableException;
 use Wythe\Logistics\Factory;
 use Wythe\Logistics\Logistics;
-use Wythe\Logistics\Query\BaiduQuery;
-use Wythe\Logistics\Query\Kuaidi100Query;
 
 class LogisticsTest extends TestCase
 {
+    /**
+     * 测试设置默认渠道接口
+     *
+     * @throws \Wythe\Logistics\Exceptions\Exception
+     */
     public function testSetFactoryDefault()
     {
         $factory = new Factory();
@@ -25,23 +28,40 @@ class LogisticsTest extends TestCase
         $this->assertSame('kuaidi', $factory->getDefault());
     }
 
-    public function testGetLogisticsWithInvalidParams()
+    /**
+     * 测试不传参数
+     * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
+     * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
+     */
+    public function testQueryWithInvalidParams()
     {
         $l = new Logistics();
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('code arguments cannot empty.');
-        $l->getLogisticsByName('', '');
+        $l->query('', '');
     }
 
-    public function testGetLogisticsWithQueryClass()
+    /**
+     * 测试传不存在渠道
+     *
+     * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
+     * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
+     */
+    public function testQueryWithQueryClass()
     {
         $l = new Logistics();
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Class "Wythe\Logistics\Query\KuaidiBirdQuery" not exists.');
-        $l->getLogisticsByName('123213212', 'kuaidiBird');
+        $this->expectException(NoQueryAvailableException::class);
+        $this->expectExceptionMessage('sorry! no channel class available');
+        $l->query('123213212', 'kuaidiBird');
     }
 
-    public function testGetLogisticsByBaidu()
+    /**
+     * 测试百度渠道
+     *
+     * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
+     * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
+     */
+    public function testQueryByBaidu()
     {
         $response = [
             'status' => 0,
@@ -55,11 +75,17 @@ class LogisticsTest extends TestCase
             'logistics_company' => '申通快递',
         ];
         $logistics = \Mockery::mock(Logistics::class);
-        $logistics->shouldReceive('getLogisticsByName')->andReturn($response);
-        $this->assertSame($response, $logistics->getLogisticsByName('12312211', 'baidu'));
+        $logistics->shouldReceive('query')->andReturn($response);
+        $this->assertSame($response, $logistics->query('12312211', 'baidu'));
     }
 
-    public function testGetLogisticsByKuaidi100()
+    /**
+     * 测试快递100渠道
+     *
+     * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
+     * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
+     */
+    public function testQueryByKuaidi100()
     {
         $kuaidiResponse = [
             [
@@ -67,27 +93,59 @@ class LogisticsTest extends TestCase
                 'message'  => 'OK',
                 'error_code' => 0,
                 'data' => [
-                    ['time' => '1545444420', 'desc' => '仓库-已签收'],
-                    ['time' => '1545441977', 'desc' => '广东XX服务点'],
-                    ['time' => '1545438199', 'desc' => '广东XX转运中心']
+                    ['time' => '1545444420', 'context' => '仓库-已签收'],
+                    ['time' => '1545441977', 'context' => '广东XX服务点'],
+                    ['time' => '1545438199', 'context' => '广东XX转运中心']
                 ],
                 'logistics_company' => '申通快递',
                 'logistics_bill_no' => '12312211'
             ],
         ];
         $logistics = \Mockery::mock(Logistics::class);
-        $logistics->shouldReceive('getLogisticsByName')->andReturn($kuaidiResponse);
-        $this->assertSame($kuaidiResponse, $logistics->getLogisticsByName('12312211', 'kuaidi100'));
+        $logistics->shouldReceive('query')->andReturn($kuaidiResponse);
+        $this->assertSame($kuaidiResponse, $logistics->query('12312211', 'kuaidi100'));
     }
 
-    public function testGetLogisticsBoth()
+    /**
+     * 测试爱查快递渠道
+     *
+     * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
+     * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
+     */
+    public function testQueryByIckd()
+    {
+        $response = [
+            'status' => 1,
+            'message' => '',
+            'error_code' => 0,
+            'data' => [
+                ['time' => '1545444420', 'context' => '仓库-已签收'],
+                ['time' => '1545441977', 'context' => '广东XX服务点'],
+                ['time' => '1545438199', 'context' => '广东XX转运中心']
+            ],
+            'logistics_company' => '优速快递',
+            'logistics_bill_no' => '12312211',
+        ];
+        $logistics = \Mockery::mock(Logistics::class);
+        $logistics->shouldReceive('query')->andReturn($response);
+        $this->assertSame($response, $logistics->query('12312211', 'ickd'));
+    }
+
+
+    /**
+     * 测试全部渠道
+     *
+     * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
+     * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
+     */
+    public function testQueryByBoth()
     {
         $response = [
             'baidu' =>[
                 'exception' => '查询不到数据'
             ],
             'kuaidi100' => [
-                'info' => [
+                'result' => [
                     [
                         'status' => 200,
                         'message'  => 'OK',
@@ -104,8 +162,8 @@ class LogisticsTest extends TestCase
             ]
         ];
         $logistics = \Mockery::mock(Logistics::class);
-        $logistics->shouldReceive('getLogisticsByArray')->andReturn($response);
-        $this->assertSame($response, $logistics->getLogisticsByArray('12312211', ['baidu', 'kuaidi100']));
+        $logistics->shouldReceive('query')->andReturn($response);
+        $this->assertSame($response, $logistics->query('12312211', ['baidu', 'kuaidi100', 'ickd']));
     }
 
 }
