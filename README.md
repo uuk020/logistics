@@ -20,8 +20,9 @@ $logistics = new Logisitics()
 ```
 ## 快递100接口获取物流信息
 ```php
-$logistics->getLogisticsByName('12313131231'); // 第二参数不设,则默认快递100接口
-$logistics->getLogisticsByName('12313131231', 'kuaidi100');
+$logistics->query('12313131231'); // 第二参数不设,则默认快递100接口
+$logistics->query('12313131231', 'kuaidi100');
+$logistics->query('12313131231', ['kuaidi100']);
 ```
 示例:
 
@@ -39,10 +40,33 @@ $logistics->getLogisticsByName('12313131231', 'kuaidi100');
    "logistics_bill_no" => "12313131231",
 ]
 ```
+## 爱查快递接口获取物流信息
+```php
+$logistics->query('12313131231', 'ickd');
+$logistics->query('12313131231', ['ickd']);
+```
+示例:
+
+```php 
+[  
+   "status" => "0",
+   "message" => "",
+   "error_code" => "0",
+   "data" => [
+       ["time" => "1545444420", "desc" => "已签收"],
+       ["time" => "1545441977", "desc" => "派件中"],
+       ["time" => "1545438199", "desc" => "已到达"]
+    ],
+   "logistics_company" => "shentong",
+   "logistics_bill_no" => "12313131231",
+]
+
+
 
 ## 百度接口获取物流信息
 ```php
-$logistics->getLogisticsByName('12313131231', 'baidu');
+$logistics->query('12313131231', 'baidu');
+$logistics->query('12313131231', ['baidu']);
 ```
 示例:
 
@@ -63,26 +87,30 @@ $logistics->getLogisticsByName('12313131231', 'baidu');
 
 ## 多接口获取物流信息
 ```php
-$logistics->getLogisticsByArray('12313131231'); // 只要一个接口请求成功, 停止请求下一个接口
-$logistics->getLogisticsByArray('12313131231', ['baidu', 'kuaidi100']);
+$logistics->query('12313131231'); // 只要一个接口请求成功, 停止请求下一个接口
+$logistics->query('12313131231', ['kuaidi100', 'ickd', 'baidu']);
 ```
 示例:
 
 ```php 
 [
-   "kuaidi100" => [
-       "info" => [  
-           status" => "200",
-           "message" => "OK",
-           "error_code" => "3",
-           "data" => [
-                ["time" => "2018-12-21 17:51:32", "ftime" => "2018-12-21 17:51:32", "context" => "已签收", "location" => NULL],
-                ["time" => "2018-12-21 17:51:32", "ftime" => "2018-12-21 16:51:32", "context" => "派件中", "location" => NULL],
-                ["time" => "2018-12-21 17:51:32", "ftime" => "2018-12-20 13:51:32" ,"context" => "已到达", "location" => NULL]
-            ],
-           "logistics_company" => "shentong",
-           "logistics_bill_no" => "12313131231",
-        ]
+   'kuaidi100' => [
+       'channel' => 'kuaidi100',
+       "status" => 'success',
+       'result' => [
+           [
+               'status' => 200,
+               'message'  => 'OK',
+               'error_code' => 0,
+               'data' => [
+                   ['time' => '1545444420', 'desc' => '仓库-已签收'],
+                   ['time' => '1545441977', 'desc' => '广东XX服务点'],
+                   ['time' => '1545438199', 'desc' => '广东XX转运中心']
+               ],
+               'logistics_company' => '申通快递',
+               'logistics_bill_no' => '12312211'
+           ]
+       ]
    ]
 ]
 ```
@@ -90,21 +118,27 @@ $logistics->getLogisticsByArray('12313131231', ['baidu', 'kuaidi100']);
 
 ## 参数说明
 ```
-array getLogisticsByName(string $code, $queryName = 'kuaidi100')
-
-array getLogisticsByArray(string $code, $queryArray = ['kuaidi100', 'baidu'])
+array query(string $code, $channels = ['kuaidi100'])
 ```
 
 * $code - 运单号
-* $queryName - 接口名称, 目前支持百度(baidu), 快递100(kuaidi100)
-* $queryArray - 接口数组, 如: ['kuaidi100', 'baidu']
+* $channel - 渠道名称, 可选参数,默认快递100.目前支持百度(baidu), 快递100(kuaidi100), 爱查快递(ickd)
+
+## 有关请求次数
+据测试随机生成100个运单循环请求, 目前没有限制. 但这些接口都是我抓包得来, 虽然我随机设置user-agent,
+但是不够保险, 因此可能请求过多会有限制,就要更换IP来去请求.
 
 ## 参考
+* [PHP 扩展包实战教程 - 从入门到发布](https://laravel-china.org/courses/creating-package)
 * [高德开放平台接口的 PHP 天气信息组件(weather)](https://github.com/overtrue/weather)
 * [满足你的多种发送需求的短信发送组件(easy-sms)](https://github.com/overtrue/easy-sms)
 
 ## 最后
-欢迎提出issue
+感谢安正超 - 超哥提供教程, 让我知道如何构建一个包, 学习到很多东西. 
+其实我才做PHP没多久, 没想到有这么多人star. 
+虽然现在才121,但对来说是一份认可, 谢谢.
+
+欢迎提出issue和pull request
 
 
 ## License
