@@ -6,19 +6,20 @@
  * Time: 21:37
  */
 
-namespace Wythe\Logistics\Query;
+namespace Wythe\Logistics\Channel;
 
 
 use Wythe\Logistics\Exceptions\Exception;
 use Wythe\Logistics\Exceptions\HttpException;
 use Wythe\Logistics\Exceptions\InvalidArgumentException;
 
-class Kuaidi100Query extends Query
+class Kuaidi100Channel extends Channel
 {
 
     private $autoGetCompanyNameByUrl = 'http://m.kuaidi100.com/autonumber/autoComNum';
     /**
      * 构造函数
+     *
      * Kuaidi100Query constructor.
      */
     public function __construct()
@@ -33,7 +34,7 @@ class Kuaidi100Query extends Query
      * @return array
      * @throws \Wythe\Logistics\Exceptions\HttpException
      */
-    public function callInterface(string $code): array
+    public function get(string $code): array
     {
         try {
             $companyCodes = $this->getCompanyCode($code);

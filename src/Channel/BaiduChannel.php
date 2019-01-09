@@ -6,16 +6,17 @@
  * Time: 21:35
  */
 
-namespace Wythe\Logistics\Query;
+namespace Wythe\Logistics\Channel;
 
 
 use Wythe\Logistics\Exceptions\HttpException;
 use Wythe\Logistics\Exceptions\InvalidArgumentException;
 
-class BaiduQuery extends Query
+class BaiduChannel extends Channel
 {
     /**
      * 构造函数
+     *
      * BaiduQuery constructor.
      */
     public function __construct()
@@ -30,7 +31,7 @@ class BaiduQuery extends Query
      * @return array
      * @throws \Wythe\Logistics\Exceptions\HttpException
      */
-    public function callInterface(string $code): array
+    public function get(string $code): array
     {
         try {
             $rand = $this->randNumber();

@@ -6,12 +6,12 @@
  * Time: 21:32
  */
 
-namespace Wythe\Logistics\Query;
+namespace Wythe\Logistics\Channel;
 
 use Wythe\Logistics\Exceptions\HttpException;
 use Wythe\Logistics\Traits\HttpRequest;
 
-abstract class Query
+abstract class Channel
 {
     use HttpRequest;
 
@@ -24,7 +24,7 @@ abstract class Query
      * @param string $code
      * @return array
      */
-    abstract public function callInterface(string $code):array ;
+    abstract public function get(string $code):array ;
 
     /**
      * 格式响应信息

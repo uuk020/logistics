@@ -6,6 +6,10 @@ use Wythe\Logistics\Exceptions\NoQueryAvailableException;
 
 class Logistics
 {
+    const SUCCESS = 'success';
+
+    const FAILURE = 'failure';
+
     protected $factory;
 
     /**
@@ -18,49 +22,44 @@ class Logistics
     }
 
     /**
-     * 通过接口名称获取物流信息
+     * 通过接口获取物流信息
      *
      * @param string $code
-     * @param string $queryName
-     * @return array
-     * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
-     */
-    public function getLogisticsByName(string $code, string $queryName = ''): array
-    {
-        if (empty($code)) {
-            throw new InvalidArgumentException('code arguments cannot empty.');
-        }
-        $results = $this->factory->getInstance($queryName)->callInterface($code);
-        return $results;
-    }
-
-    /**
-     * 通过接口数组获取物流信息
-     *
-     * @param string $code
-     * @param array  $queryArray
+     * @param array  $channels
      * @return array
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
      */
-    public function getLogisticsByArray(string $code, array $queryArray = ['kuaidi100', 'baidu']): array
+    public function query(string $code, $channels = ['kuaidi100']): array
     {
         $results = [];
         $isSuccessful = false;
         if (empty($code)) {
             throw new InvalidArgumentException('code arguments cannot empty.');
         }
-        foreach ($queryArray as $class) {
+        if (!empty($channels) && is_string($channels)) {
+            $channels = explode(',', $channels);
+        }
+        foreach ($channels as $channel) {
             try {
-                $results[$class]['info'] = $this->factory->getInstance($class)->callInterface($code);
+                $results[$channel] = [
+                    'channel' => $channel,
+                    'status' => self::SUCCESS,
+                    'result' => $this->factory->createChannel($channel)->get($code),
+                ];
                 $isSuccessful = true;
                 break;
             } catch (\Exception $exception) {
-                $results[$class]['exception'] = $exception->getMessage();
+                $results[$channel] = [
+                    'channel' => $channel,
+                    'status' => self::FAILURE,
+                    'exception' => $exception->getMessage(),
+                ];
+
             }
         }
         if (!$isSuccessful) {
-            throw new NoQueryAvailableException('sorry! no query class available');
+            throw new NoQueryAvailableException('sorry! no channel class available');
         }
         return $results;
     }

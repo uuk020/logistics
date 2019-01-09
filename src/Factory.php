@@ -10,13 +10,13 @@ namespace Wythe\Logistics;
 
 use Wythe\Logistics\Exceptions\InvalidArgumentException;
 use Wythe\Logistics\Exceptions\Exception;
-use Wythe\Logistics\Query\Query;
+use Wythe\Logistics\Channel\Channel;
 
 class Factory
 {
-    private $default = 'baidu';
+    private $defaultChannel = 'baidu';
 
-    protected $interfaces = [];
+    protected $channels = [];
 
     /**
      * 获取默认查询类名称
@@ -26,10 +26,10 @@ class Factory
      */
     public function getDefault():string
     {
-        if (empty($this->default)) {
+        if (empty($this->defaultChannel)) {
             throw new Exception('No default query class name configured.');
         }
-        return $this->default;
+        return $this->defaultChannel;
     }
 
     /**
@@ -39,7 +39,7 @@ class Factory
      */
     public function setDefault($name)
     {
-        $this->default = $name;
+        $this->defaultChannel = $name;
     }
 
     /**
@@ -49,21 +49,21 @@ class Factory
      * @return mixed
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      */
-    public function getInstance(string $name = '')
+    public function createChannel(string $name = '')
     {
-        $name = $name ?: $this->default;
+        $name = $name ?: $this->defaultChannel;
         if (!isset($this->queryList[$name])) {
             $className = $this->formatClassName($name);
             if (!class_exists($className)) {
                 throw new InvalidArgumentException(sprintf('Class "%s" not exists.', $className));
             }
             $instance = new $className();
-            if (!($instance instanceof Query)) {
-                throw new InvalidArgumentException(sprintf('Class "%s" not inherited from %s.', $name, Query::class));
+            if (!($instance instanceof Channel)) {
+                throw new InvalidArgumentException(sprintf('Class "%s" not inherited from %s.', $name, Channel::class));
             }
-            $this->interfaces[$name] = $instance;
+            $this->channels[$name] = $instance;
         }
-        return $this->interfaces[$name];
+        return $this->channels[$name];
     }
 
     /**
@@ -78,6 +78,6 @@ class Factory
             return $name;
         }
         $name = ucfirst(str_replace(['-', '_', ' '], '', $name));
-        return __NAMESPACE__ . "\\Query\\{$name}Query";
+        return __NAMESPACE__ . "\\Channel\\{$name}Channel";
     }
 }
