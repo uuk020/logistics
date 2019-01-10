@@ -38,9 +38,9 @@ $logistics->query('12313131231', ['kuaidi100']);
                'message'  => 'OK',
                'error_code' => 0,
                'data' => [
-                   ['time' => '1545444420', 'context' => '仓库-已签收'],
-                   ['time' => '1545441977', 'context' => '广东XX服务点'],
-                   ['time' => '1545438199', 'context' => '广东XX转运中心']
+                   ['time' => '2019-01-09 12:11', 'context' => '仓库-已签收'],
+                   ['time' => '2019-01-07 12:11', 'context' => '广东XX服务点'],
+                   ['time' => '2019-01-06 12:11', 'context' => '广东XX转运中心']
                ],
                'logistics_company' => '申通快递',
                'logistics_bill_no' => '12312211'
@@ -68,9 +68,9 @@ $logistics->query('12313131231', ['ickd']);
                'message'  => 'OK',
                'error_code' => 0,
                'data' => [
-                   ['time' => '1545444420', 'context' => '仓库-已签收'],
-                   ['time' => '1545441977', 'context' => '广东XX服务点'],
-                   ['time' => '1545438199', 'context' => '广东XX转运中心']
+                   ['time' => '2019-01-09 12:11', 'context' => '仓库-已签收'],
+                   ['time' => '2019-01-07 12:11', 'context' => '广东XX服务点'],
+                   ['time' => '2019-01-06 12:11', 'context' => '广东XX转运中心']
                ],
                'logistics_company' => '申通快递',
                'logistics_bill_no' => '12312211'
@@ -88,17 +88,25 @@ $logistics->query('12313131231', ['baidu']);
 示例:
 
 ```php 
-[  
-   "status" => "0",
-   "message" => "",
-   "error_code" => "0",
-   "data" => [
-       ["time" => "1545444420", "desc" => "已签收"],
-       ["time" => "1545441977", "desc" => "派件中"],
-       ["time" => "1545438199", "desc" => "已到达"]
-    ],
-   "logistics_company" => "shentong",
-   "logistics_bill_no" => "12313131231",
+[
+   'baidu' => [
+       'channel' => 'baidu',
+       "status" => 'success',
+       'result' => [
+           [
+               'status' => 200,
+               'message'  => 'OK',
+               'error_code' => 0,
+               'data' => [
+                   ['time' => '1545444420', 'desc' => '仓库-已签收'],
+                   ['time' => '1545441977', 'desc' => '广东XX服务点'],
+                   ['time' => '1545438199', 'desc' => '广东XX转运中心']
+               ],
+               'logistics_company' => '申通快递',
+               'logistics_bill_no' => '12312211'
+           ]
+       ]
+   ]
 ]
 ```
 
@@ -120,9 +128,9 @@ $logistics->query('12313131231', ['kuaidi100', 'ickd', 'baidu']);
                'message'  => 'OK',
                'error_code' => 0,
                'data' => [
-                   ['time' => '1545444420', 'desc' => '仓库-已签收'],
-                   ['time' => '1545441977', 'desc' => '广东XX服务点'],
-                   ['time' => '1545438199', 'desc' => '广东XX转运中心']
+                   ['time' => '2019-01-09 12:11', 'context' => '仓库-已签收'],
+                   ['time' => '2019-01-07 12:11', 'context' => '广东XX服务点'],
+                   ['time' => '2019-01-06 12:11', 'context' => '广东XX转运中心']
                ],
                'logistics_company' => '申通快递',
                'logistics_bill_no' => '12312211'
