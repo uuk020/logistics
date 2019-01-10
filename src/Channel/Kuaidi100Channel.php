@@ -77,16 +77,14 @@ class Kuaidi100Channel extends Channel
     {
         foreach ($response as $item) {
             $data = \json_decode($item['result'], true);
-            if ($data['status'] == 200) {
-                $this->response[] = [
-                    'status'  => $data['status'],
-                    'message' => $data['message'],
-                    'error_code' => $data['state'] ?? '',
-                    'data' => $data['data'] ?? '',
-                    'logistics_company' => $data['com'] ?? '',
-                    'logistics_bill_no' => $data['nu'] ?? '',
-                ];
-            }
+            $this->response[] = [
+                'status'  => $data['status'],
+                'message' => $data['message'],
+                'error_code' => $data['state'] ?? '',
+                'data' => $data['data'] ?? '',
+                'logistics_company' => $data['com'] ?? '',
+                'logistics_bill_no' => $data['nu'] ?? '',
+            ];
         }
     }
 }
