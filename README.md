@@ -18,6 +18,7 @@ $ composer require wythe/logistics -vvv
 use Wythe\Logistics\Logistics
 $logistics = new Logisitics()
 ```
+
 ## 快递100接口获取物流信息
 ```php
 $logistics->query('12313131231'); // 第二参数不设,则默认快递100接口
@@ -27,19 +28,28 @@ $logistics->query('12313131231', ['kuaidi100']);
 示例:
 
 ```php 
-[  
-   "status" => "200",
-   "message" => "OK",
-   "error_code" => "3",
-   "data" => [
-       ["time" => "2018-12-21 17:51:32", "ftime" => "2018-12-21 17:51:32", "context" => "已签收", "location" => NULL],
-       ["time" => "2018-12-21 17:51:32", "ftime" => "2018-12-21 16:51:32", "context" => "派件中", "location" => NULL],
-       ["time" => "2018-12-21 17:51:32", "ftime" => "2018-12-20 13:51:32" ,"context" => "已到达", "location" => NULL]
-    ],
-   "logistics_company" => "shentong",
-   "logistics_bill_no" => "12313131231",
+[
+   'kuaidi100' => [
+       'channel' => 'kuaidi100',
+       "status" => 'success',
+       'result' => [
+           [
+               'status' => 200,
+               'message'  => 'OK',
+               'error_code' => 0,
+               'data' => [
+                   ['time' => '1545444420', 'context' => '仓库-已签收'],
+                   ['time' => '1545441977', 'context' => '广东XX服务点'],
+                   ['time' => '1545438199', 'context' => '广东XX转运中心']
+               ],
+               'logistics_company' => '申通快递',
+               'logistics_bill_no' => '12312211'
+           ]
+       ]
+   ]
 ]
 ```
+
 ## 爱查快递接口获取物流信息
 ```php
 $logistics->query('12313131231', 'ickd');
@@ -48,20 +58,27 @@ $logistics->query('12313131231', ['ickd']);
 示例:
 
 ```php 
-[  
-   "status" => "0",
-   "message" => "",
-   "error_code" => "0",
-   "data" => [
-       ["time" => "1545444420", "desc" => "已签收"],
-       ["time" => "1545441977", "desc" => "派件中"],
-       ["time" => "1545438199", "desc" => "已到达"]
-    ],
-   "logistics_company" => "shentong",
-   "logistics_bill_no" => "12313131231",
+[
+   'ickd' => [
+       'channel' => 'ickd',
+       "status" => 'success',
+       'result' => [
+           [
+               'status' => 200,
+               'message'  => 'OK',
+               'error_code' => 0,
+               'data' => [
+                   ['time' => '1545444420', 'context' => '仓库-已签收'],
+                   ['time' => '1545441977', 'context' => '广东XX服务点'],
+                   ['time' => '1545438199', 'context' => '广东XX转运中心']
+               ],
+               'logistics_company' => '申通快递',
+               'logistics_bill_no' => '12312211'
+           ]
+       ]
+   ]
 ]
-
-
+```
 
 ## 百度接口获取物流信息
 ```php
@@ -115,7 +132,6 @@ $logistics->query('12313131231', ['kuaidi100', 'ickd', 'baidu']);
 ]
 ```
 
-
 ## 参数说明
 ```
 array query(string $code, $channels = ['kuaidi100'])
@@ -136,7 +152,7 @@ array query(string $code, $channels = ['kuaidi100'])
 ## 最后
 感谢安正超 - 超哥提供教程, 让我知道如何构建一个包, 学习到很多东西. 
 其实我才做PHP没多久, 没想到有这么多人star. 
-虽然现在才121,但对来说是一份认可, 谢谢.
+虽然现在才121,但对我来说是一份认可, 谢谢.
 
 欢迎提出issue和pull request
 
