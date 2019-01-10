@@ -52,7 +52,7 @@ class Factory
     public function createChannel(string $name = '')
     {
         $name = $name ?: $this->defaultChannel;
-        if (!isset($this->queryList[$name])) {
+        if (!isset($this->channels[$name])) {
             $className = $this->formatClassName($name);
             if (!class_exists($className)) {
                 throw new InvalidArgumentException(sprintf('Class "%s" not exists.', $className));
