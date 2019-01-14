@@ -17,7 +17,7 @@ class BaiduChannel extends Channel
     /**
      * 构造函数
      *
-     * BaiduQuery constructor.
+     * BaiduChannel constructor.
      */
     public function __construct()
     {

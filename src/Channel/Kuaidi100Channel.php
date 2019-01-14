@@ -20,7 +20,7 @@ class Kuaidi100Channel extends Channel
     /**
      * 构造函数
      *
-     * Kuaidi100Query constructor.
+     * Kuaidi100Channel constructor.
      */
     public function __construct()
     {
