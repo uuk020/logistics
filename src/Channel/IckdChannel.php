@@ -53,7 +53,8 @@ class IckdChannel extends Channel
                 'callback' => '_jqjsp',
                 '_'.time()
             ];
-            $this->format($this->request($this->url.$code, $urlParams, 0, ['referer: https://biz.trace.ickd.cn']));
+            $response = $this->request($this->url.$code, $urlParams, 0, ['referer: https://biz.trace.ickd.cn']);
+            $this->format($this->toArray($response));
             return $this->response;
         } catch (\Exception $exception) {
             throw new HttpException($exception->getMessage());
@@ -61,11 +62,11 @@ class IckdChannel extends Channel
     }
 
     /**
-     * 格式化请求返回信息
+     * 转为数组
      *
      * @param array|string $response
      */
-    protected function format($response)
+    protected function toArray($response)
     {
         $pattern = '/(\_jqjsp\()({.*})\)/i';
         if (preg_match($pattern, $response, $match)) {
@@ -86,6 +87,22 @@ class IckdChannel extends Channel
                 'data' => '',
                 'logistics_company' => ''
             ];
+        }
+    }
+
+    /**
+     * 统一物流信息
+     *
+     * @return mixed|void
+     */
+    protected function format()
+    {
+        if (!empty($this->response['data']) && is_array($this->response['data'])) {
+            $formatData = [];
+            foreach ($this->response['data'] as $datum) {
+                $formatData[] = ['time' => $datum['time'], 'description' => $datum['context']];
+            }
+            $this->response['data'] = $formatData;
         }
     }
 }

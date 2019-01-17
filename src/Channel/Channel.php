@@ -18,6 +18,7 @@ abstract class Channel
     protected $url;
 
     protected $response;
+
     /**
      * 调用查询接口
      *
@@ -27,10 +28,17 @@ abstract class Channel
     abstract public function get(string $code):array ;
 
     /**
-     * 格式响应信息
+     * 转换为数组
      *
      * @param string|array $response
      * @return void
      */
-    abstract protected function format($response);
+    abstract protected function toArray($response);
+
+    /**
+     * 格式物流信息
+     *
+     * @return mixed
+     */
+    abstract protected function format();
 }

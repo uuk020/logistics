@@ -43,7 +43,8 @@ class Kuaidi100Channel extends Channel
                 $urlParams[] = ['type' => $companyCode, 'postid' => $code];
                 $urls[] = $this->url;
             }
-            $this->format($this->requestWithUrls($urls, $urlParams));
+            $response = $this->requestWithUrls($urls, $urlParams);
+            $this->format($this->toArray($response));
             return $this->response;
         } catch (\Exception $exception) {
             throw new HttpException($exception->getMessage());
@@ -69,11 +70,11 @@ class Kuaidi100Channel extends Channel
     }
 
     /**
-     * 格式响应数据
+     * 转为数组
      *
      * @param array|string $response
      */
-    protected function format($response)
+    protected function toArray($response)
     {
         foreach ($response as $item) {
             $data = \json_decode($item['result'], true);
@@ -86,5 +87,24 @@ class Kuaidi100Channel extends Channel
                 'logistics_bill_no' => $data['nu'] ?? '',
             ];
         }
+    }
+
+    /**
+     * 统一物流信息
+     *
+     * @return mixed|void
+     */
+    protected function format()
+    {
+        $formatData = [];
+        foreach ($this->response as &$item) {
+            if (!empty($item['data']) && is_array($item['data'])) {
+                foreach ($item['data'] as $datum) {
+                    $formatData[] = ['time' => $datum['time'], 'description' => $datum['context']];
+                }
+                $item['data'] = $formatData;
+            }
+        }
+        unset($item);
     }
 }

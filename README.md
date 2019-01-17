@@ -31,7 +31,7 @@ $logistics->query('12313131231', ['kuaidi100']);
 [
    'kuaidi100' => [
        'channel' => 'kuaidi100',
-       "status" => 'success',
+       'status' => 'success',
        'result' => [
            [
                'status' => 200,
@@ -44,6 +44,14 @@ $logistics->query('12313131231', ['kuaidi100']);
                ],
                'logistics_company' => '申通快递',
                'logistics_bill_no' => '12312211'
+           ],
+           [
+               'status' => 201,
+               'message' => '快递公司参数异常：单号不存在或者已经过期',
+               'error_code' => 0,
+               'data' => '',
+               'logistics_company' => '',
+               'logistics_bill_no' => ''
            ]
        ]
    ]
@@ -61,7 +69,7 @@ $logistics->query('12313131231', ['ickd']);
 [
    'ickd' => [
        'channel' => 'ickd',
-       "status" => 'success',
+       'status' => 'success',
        'result' => [
            [
                'status' => 200,
@@ -91,16 +99,16 @@ $logistics->query('12313131231', ['baidu']);
 [
    'baidu' => [
        'channel' => 'baidu',
-       "status" => 'success',
+       'status' => 'success',
        'result' => [
            [
                'status' => 200,
                'message'  => 'OK',
                'error_code' => 0,
                'data' => [
-                   ['time' => '1545444420', 'desc' => '仓库-已签收'],
-                   ['time' => '1545441977', 'desc' => '广东XX服务点'],
-                   ['time' => '1545438199', 'desc' => '广东XX转运中心']
+                   ['time' => '2019-01-09 12:11', 'desc' => '仓库-已签收'],
+                   ['time' => '2019-01-09 12:11', 'desc' => '广东XX服务点'],
+                   ['time' => '2019-01-09 12:11', 'desc' => '广东XX转运中心']
                ],
                'logistics_company' => '申通快递',
                'logistics_bill_no' => '12312211'
@@ -112,7 +120,7 @@ $logistics->query('12313131231', ['baidu']);
 
 ## 多接口获取物流信息
 ```php
-$logistics->query('12313131231'); // 只要一个接口请求成功, 停止请求下一个接口
+$logistics->query('12313131231');
 $logistics->query('12313131231', ['kuaidi100', 'ickd', 'baidu']);
 ```
 示例:
@@ -121,7 +129,7 @@ $logistics->query('12313131231', ['kuaidi100', 'ickd', 'baidu']);
 [
    'kuaidi100' => [
        'channel' => 'kuaidi100',
-       "status" => 'success',
+       'status' => 'success',
        'result' => [
            [
                'status' => 200,
@@ -131,6 +139,50 @@ $logistics->query('12313131231', ['kuaidi100', 'ickd', 'baidu']);
                    ['time' => '2019-01-09 12:11', 'context' => '仓库-已签收'],
                    ['time' => '2019-01-07 12:11', 'context' => '广东XX服务点'],
                    ['time' => '2019-01-06 12:11', 'context' => '广东XX转运中心']
+               ],
+               'logistics_company' => '申通快递',
+               'logistics_bill_no' => '12312211'
+           ],
+           [
+               'status' => 201,
+               'message' => '快递公司参数异常：单号不存在或者已经过期',
+               'error_code' => 0,
+               'data' => '',
+               'logistics_company' => '',
+               'logistics_bill_no' => ''
+           ]
+       ]
+   ],
+   'ickd' => [
+       'channel' => 'ickd',
+       'status' => 'success',
+       'result' => [
+           [
+               'status' => 200,
+               'message'  => 'OK',
+               'error_code' => 0,
+                'data' => [
+                    ['time' => '2019-01-09 12:11', 'context' => '仓库-已签收'],
+                    ['time' => '2019-01-07 12:11', 'context' => '广东XX服务点'],
+                    ['time' => '2019-01-06 12:11', 'context' => '广东XX转运中心']
+                ],
+                'logistics_company' => '申通快递',
+                'logistics_bill_no' => '12312211'
+           ]
+       ]
+   ],
+   'baidu' => [
+       'channel' => 'baidu',
+       'status' => 'success',
+       'result' => [
+           [
+               'status' => 200,
+               'message'  => 'OK',
+               'error_code' => 0,
+               'data' => [
+                   ['time' => '2019-01-09 12:11', 'desc' => '仓库-已签收'],
+                   ['time' => '2019-01-09 12:11', 'desc' => '广东XX服务点'],
+                   ['time' => '2019-01-09 12:11', 'desc' => '广东XX转运中心']
                ],
                'logistics_company' => '申通快递',
                'logistics_bill_no' => '12312211'

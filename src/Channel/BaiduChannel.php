@@ -44,7 +44,8 @@ class BaiduChannel extends Channel
                 'token' => '',
                 '_' => $rand[1]
             ];
-            $this->format($this->request($this->url, $urlParams));
+            $response = $this->request($this->url, $urlParams);
+            $this->format($this->toArray($response));
             $this->response['logistics_bill_no'] = $code;
             return $this->response;
         } catch (\Exception $exception) {
@@ -53,12 +54,12 @@ class BaiduChannel extends Channel
     }
 
     /**
-     * 格式返回响应信息
+     * 转为数组
      *
      * @param  $response
      * @return void
      */
-    protected function format($response)
+    protected function toArray($response)
     {
         $pattern = '/(jQuery\d+_\d+\()({.*})\)$/i';
         if (preg_match($pattern, $response, $match)) {
@@ -78,6 +79,22 @@ class BaiduChannel extends Channel
                 'data' => '',
                 'logistics_company' => ''
             ];
+        }
+    }
+
+    /**
+     * 统一物流信息
+     *
+     * @return mixed|void
+     */
+    protected function format()
+    {
+        if (!empty($this->response['data']) && is_array($this->response['data'])) {
+            $formatData = [];
+            foreach ($this->response['data'] as $datum) {
+                $formatData[] = ['time' => date('Y-m-d H:i:s', $datum['time']), 'description' => $datum['desc']];
+            }
+            $this->response['data'] = $formatData;
         }
     }
 

@@ -49,10 +49,16 @@ class LogisticsTest extends TestCase
      */
     public function testQueryWithQueryClass()
     {
-        $l = new Logistics();
-        $this->expectException(NoQueryAvailableException::class);
-        $this->expectExceptionMessage('sorry! no channel class available');
-        $l->query('123213212', 'kuaidiBird');
+        $response = [
+            'kuaidBird' => [
+                'channel' => 'kuaidiBird',
+                'status' => 'failure',
+                'exception' => 'Wythe\Logistics\Channel\kuaidBirdChannel" not exists.'
+            ]
+        ];
+        $logistics = \Mockery::mock(Logistics::class);
+        $logistics->shouldReceive('query')->andReturn($response);
+        $this->assertSame($response, $logistics->query('12312211', 'kuaidBird'));
     }
 
     /**
@@ -64,15 +70,21 @@ class LogisticsTest extends TestCase
     public function testQueryByBaidu()
     {
         $response = [
-            'status' => 0,
-            'message'  => 'OK',
-            'error_code' => 0,
-            'data' => [
-                ['time' => '1545444420', 'desc' => '仓库-已签收'],
-                ['time' => '1545441977', 'desc' => '广东XX服务点'],
-                ['time' => '1545438199', 'desc' => '广东XX转运中心']
+            'baidu' => [
+                'channel' => 'baidu',
+                'status' => 'success',
+                'result' => [
+                    'status' => 0,
+                    'message'  => 'OK',
+                    'error_code' => 0,
+                    'data' => [
+                        ['time' => '2019-01-09 12:11', 'desc' => '仓库-已签收'],
+                        ['time' => '2019-01-09 12:11', 'desc' => '广东XX服务点'],
+                        ['time' => '2019-01-09 12:11', 'desc' => '广东XX转运中心']
+                    ],
+                    'logistics_company' => '申通快递',
+                ]
             ],
-            'logistics_company' => '申通快递',
         ];
         $logistics = \Mockery::mock(Logistics::class);
         $logistics->shouldReceive('query')->andReturn($response);
@@ -88,17 +100,31 @@ class LogisticsTest extends TestCase
     public function testQueryByKuaidi100()
     {
         $kuaidiResponse = [
-            [
-                'status' => 200,
-                'message'  => 'OK',
-                'error_code' => 0,
-                'data' => [
-                    ['time' => '1545444420', 'context' => '仓库-已签收'],
-                    ['time' => '1545441977', 'context' => '广东XX服务点'],
-                    ['time' => '1545438199', 'context' => '广东XX转运中心']
-                ],
-                'logistics_company' => '申通快递',
-                'logistics_bill_no' => '12312211'
+            'kuaidi100' => [
+                'channel' => 'kuaidi100',
+                'status' => 'success',
+                'result' => [
+                    [
+                        'status' => 200,
+                        'message'  => 'OK',
+                        'error_code' => 0,
+                        'data' => [
+                            ['time' => '1545444420', 'description' => '仓库-已签收'],
+                            ['time' => '1545441977', 'description' => '广东XX服务点'],
+                            ['time' => '1545438199', 'description' => '广东XX转运中心']
+                        ],
+                        'logistics_company' => '申通快递',
+                        'logistics_bill_no' => '12312211'
+                    ],
+                    [
+                        'status' => 201,
+                        'message' => '快递公司参数异常：单号不存在或者已经过期',
+                        'error_code' => 0,
+                        'data' => '',
+                        'logistics_company' => '',
+                        'logistics_bill_no' => ''
+                    ]
+                ]
             ],
         ];
         $logistics = \Mockery::mock(Logistics::class);
@@ -115,16 +141,24 @@ class LogisticsTest extends TestCase
     public function testQueryByIckd()
     {
         $response = [
-            'status' => 1,
-            'message' => '',
-            'error_code' => 0,
-            'data' => [
-                ['time' => '1545444420', 'context' => '仓库-已签收'],
-                ['time' => '1545441977', 'context' => '广东XX服务点'],
-                ['time' => '1545438199', 'context' => '广东XX转运中心']
-            ],
-            'logistics_company' => '优速快递',
-            'logistics_bill_no' => '12312211',
+            'ickd' => [
+                'channel' => 'ickd',
+                'status' => 'success',
+                'result' => [
+                    [
+                        'status' => 200,
+                        'message'  => 'OK',
+                        'error_code' => 0,
+                        'data' => [
+                            ['time' => '1545444420', 'description' => '仓库-已签收'],
+                            ['time' => '1545441977', 'description' => '广东XX服务点'],
+                            ['time' => '1545438199', 'description' => '广东XX转运中心']
+                        ],
+                        'logistics_company' => '申通快递',
+                        'logistics_bill_no' => '12312211'
+                    ]
+               ]
+            ]
         ];
         $logistics = \Mockery::mock(Logistics::class);
         $logistics->shouldReceive('query')->andReturn($response);
@@ -141,29 +175,70 @@ class LogisticsTest extends TestCase
     public function testQueryByBoth()
     {
         $response = [
-            'baidu' =>[
-                'exception' => '查询不到数据'
+            'baidu' => [
+                'channel' => 'baidu',
+                'status' => 'success',
+                'result' => [
+                    [
+                        'status' => 200,
+                        'message'  => '抱歉，查询出错，请重试或点击快递公司官网地址进行查询',
+                        'error_code' => 0,
+                        'data' => '',
+                        'logistics_company' => '申通快递',
+                        'logistics_bill_no' => '12312211'
+                    ]
+                ]
             ],
             'kuaidi100' => [
+                'channel' => 'kuaidi100',
+                'status' => 'success',
                 'result' => [
                     [
                         'status' => 200,
                         'message'  => 'OK',
                         'error_code' => 0,
                         'data' => [
-                            ['time' => '1545444420', 'desc' => '仓库-已签收'],
-                            ['time' => '1545441977', 'desc' => '广东XX服务点'],
-                            ['time' => '1545438199', 'desc' => '广东XX转运中心']
+                            ['time' => '1545444420', 'description' => '仓库-已签收'],
+                            ['time' => '1545441977', 'description' => '广东XX服务点'],
+                            ['time' => '1545438199', 'description' => '广东XX转运中心']
+                        ],
+                        'logistics_company' => '申通快递',
+                        'logistics_bill_no' => '12312211'
+                    ],
+                    [
+                        'status' => 201,
+                        'message' => '快递公司参数异常：单号不存在或者已经过期',
+                        'error_code' => 0,
+                        'data' => '',
+                        'logistics_company' => '',
+                        'logistics_bill_no' => ''
+                    ]
+                ]
+            ],
+            'ickd' => [
+                'channel' => 'ickd',
+                'status' => 'success',
+                'result' => [
+                    [
+                        'status' => 200,
+                        'message'  => 'OK',
+                        'error_code' => 0,
+                        'data' => [
+                            ['time' => '1545444420', 'description' => '仓库-已签收'],
+                            ['time' => '1545441977', 'description' => '广东XX服务点'],
+                            ['time' => '1545438199', 'description' => '广东XX转运中心']
                         ],
                         'logistics_company' => '申通快递',
                         'logistics_bill_no' => '12312211'
                     ]
                 ]
-            ]
+            ],
         ];
         $logistics = \Mockery::mock(Logistics::class);
         $logistics->shouldReceive('query')->andReturn($response);
         $this->assertSame($response, $logistics->query('12312211', ['baidu', 'kuaidi100', 'ickd']));
     }
+
+
 
 }

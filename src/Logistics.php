@@ -33,7 +33,6 @@ class Logistics
     public function query(string $code, $channels = ['kuaidi100']): array
     {
         $results = [];
-        $isSuccessful = false;
         if (empty($code)) {
             throw new InvalidArgumentException('code arguments cannot empty.');
         }
@@ -47,18 +46,16 @@ class Logistics
                     'status' => self::SUCCESS,
                     'result' => $this->factory->createChannel($channel)->get($code),
                 ];
-                $isSuccessful = true;
-                break;
             } catch (\Exception $exception) {
                 $results[$channel] = [
                     'channel' => $channel,
                     'status' => self::FAILURE,
                     'exception' => $exception->getMessage(),
                 ];
-
             }
         }
-        if (!$isSuccessful) {
+        $collectionOfException = array_column($results, 'exception');
+        if (count($collectionOfException) === 3) {
             throw new NoQueryAvailableException('sorry! no channel class available');
         }
         return $results;
