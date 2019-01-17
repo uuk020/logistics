@@ -38,9 +38,9 @@ $logistics->query('12313131231', ['kuaidi100']);
                'message'  => 'OK',
                'error_code' => 0,
                'data' => [
-                   ['time' => '2019-01-09 12:11', 'context' => '仓库-已签收'],
-                   ['time' => '2019-01-07 12:11', 'context' => '广东XX服务点'],
-                   ['time' => '2019-01-06 12:11', 'context' => '广东XX转运中心']
+                   ['time' => '2019-01-09 12:11', 'description' => '仓库-已签收'],
+                   ['time' => '2019-01-07 12:11', 'description' => '广东XX服务点'],
+                   ['time' => '2019-01-06 12:11', 'description' => '广东XX转运中心']
                ],
                'logistics_company' => '申通快递',
                'logistics_bill_no' => '12312211'
@@ -76,9 +76,9 @@ $logistics->query('12313131231', ['ickd']);
                'message'  => 'OK',
                'error_code' => 0,
                'data' => [
-                   ['time' => '2019-01-09 12:11', 'context' => '仓库-已签收'],
-                   ['time' => '2019-01-07 12:11', 'context' => '广东XX服务点'],
-                   ['time' => '2019-01-06 12:11', 'context' => '广东XX转运中心']
+                   ['time' => '2019-01-09 12:11', 'description' => '仓库-已签收'],
+                   ['time' => '2019-01-07 12:11', 'description' => '广东XX服务点'],
+                   ['time' => '2019-01-06 12:11', 'description' => '广东XX转运中心']
                ],
                'logistics_company' => '申通快递',
                'logistics_bill_no' => '12312211'
@@ -106,9 +106,9 @@ $logistics->query('12313131231', ['baidu']);
                'message'  => 'OK',
                'error_code' => 0,
                'data' => [
-                   ['time' => '2019-01-09 12:11', 'desc' => '仓库-已签收'],
-                   ['time' => '2019-01-09 12:11', 'desc' => '广东XX服务点'],
-                   ['time' => '2019-01-09 12:11', 'desc' => '广东XX转运中心']
+                   ['time' => '2019-01-09 12:11', 'description' => '仓库-已签收'],
+                   ['time' => '2019-01-09 12:11', 'description' => '广东XX服务点'],
+                   ['time' => '2019-01-09 12:11', 'description' => '广东XX转运中心']
                ],
                'logistics_company' => '申通快递',
                'logistics_bill_no' => '12312211'
@@ -136,9 +136,9 @@ $logistics->query('12313131231', ['kuaidi100', 'ickd', 'baidu']);
                'message'  => 'OK',
                'error_code' => 0,
                'data' => [
-                   ['time' => '2019-01-09 12:11', 'context' => '仓库-已签收'],
-                   ['time' => '2019-01-07 12:11', 'context' => '广东XX服务点'],
-                   ['time' => '2019-01-06 12:11', 'context' => '广东XX转运中心']
+                   ['time' => '2019-01-09 12:11', 'description' => '仓库-已签收'],
+                   ['time' => '2019-01-07 12:11', 'description' => '广东XX服务点'],
+                   ['time' => '2019-01-06 12:11', 'description' => '广东XX转运中心']
                ],
                'logistics_company' => '申通快递',
                'logistics_bill_no' => '12312211'
@@ -162,9 +162,9 @@ $logistics->query('12313131231', ['kuaidi100', 'ickd', 'baidu']);
                'message'  => 'OK',
                'error_code' => 0,
                 'data' => [
-                    ['time' => '2019-01-09 12:11', 'context' => '仓库-已签收'],
-                    ['time' => '2019-01-07 12:11', 'context' => '广东XX服务点'],
-                    ['time' => '2019-01-06 12:11', 'context' => '广东XX转运中心']
+                    ['time' => '2019-01-09 12:11', 'description' => '仓库-已签收'],
+                    ['time' => '2019-01-07 12:11', 'description' => '广东XX服务点'],
+                    ['time' => '2019-01-06 12:11', 'description' => '广东XX转运中心']
                 ],
                 'logistics_company' => '申通快递',
                 'logistics_bill_no' => '12312211'
@@ -180,9 +180,9 @@ $logistics->query('12313131231', ['kuaidi100', 'ickd', 'baidu']);
                'message'  => 'OK',
                'error_code' => 0,
                'data' => [
-                   ['time' => '2019-01-09 12:11', 'desc' => '仓库-已签收'],
-                   ['time' => '2019-01-09 12:11', 'desc' => '广东XX服务点'],
-                   ['time' => '2019-01-09 12:11', 'desc' => '广东XX转运中心']
+                   ['time' => '2019-01-09 12:11', 'description' => '仓库-已签收'],
+                   ['time' => '2019-01-09 12:11', 'description' => '广东XX服务点'],
+                   ['time' => '2019-01-09 12:11', 'description' => '广东XX转运中心']
                ],
                'logistics_company' => '申通快递',
                'logistics_bill_no' => '12312211'
