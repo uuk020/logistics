@@ -16,7 +16,7 @@ $ composer require wythe/logistics -vvv
 ## 使用
 ```php
 use Wythe\Logistics\Logistics
-$logistics = new Logisitics()
+$logistics = new Logistics()
 ```
 
 ## 快递100接口获取物流信息
