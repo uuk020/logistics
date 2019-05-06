@@ -19,7 +19,7 @@ use Wythe\Logistics\Logistics
 $logistics = new Logistics()
 ```
 
-## 快递100接口获取物流信息
+## 快递 100 接口获取物流信息
 ```php
 $logistics->query('12313131231'); // 第二参数不设,则默认快递100接口
 $logistics->query('12313131231', 'kuaidi100');
@@ -198,11 +198,11 @@ array query(string $code, $channels = ['kuaidi100'])
 ```
 
 * $code - 运单号
-* $channel - 渠道名称, 可选参数,默认快递100.目前支持百度(baidu), 快递100(kuaidi100), 爱查快递(ickd)
+* $channel - 渠道名称, 可选参数,默认快递 100.目前支持百度(baidu), 快递 100 (kuaidi 100), 爱查快递(ickd)
 
 ## 有关请求次数
-据测试随机生成100个运单循环请求, 目前没有限制. 但这些接口都是我抓包得来, 虽然我随机设置user-agent,
-但是不够保险, 因此可能请求过多会有限制,就要更换IP来去请求.
+据测试随机生成 100 个运单循环请求, 目前没有限制. 但这些接口都是我抓包得来, 虽然我随机设置 user-agent,
+但是不够保险, 因此可能请求过多会有限制,就要更换 IP 来去请求.
 
 ## 参考
 * [PHP 扩展包实战教程 - 从入门到发布](https://laravel-china.org/courses/creating-package)
@@ -211,10 +211,10 @@ array query(string $code, $channels = ['kuaidi100'])
 
 ## 最后
 感谢安正超 - 超哥提供教程, 让我知道如何构建一个包, 学习到很多东西. 
-其实我才做PHP没多久, 没想到有这么多人star. 
-虽然现在才121,但对我来说是一份认可, 谢谢.
+其实我才做 PHP 没多久, 没想到有这么多人 star. 
+虽然现在才 121,但对我来说是一份认可, 谢谢.
 
-欢迎提出issue和pull request
+欢迎提出 issue 和 pull request
 
 
 ## License
