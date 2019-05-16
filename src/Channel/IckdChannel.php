@@ -5,14 +5,15 @@
  * Date: 2019/1/9
  * Time: 22:09
  */
-
+declare(strict_types = 1);
 namespace Wythe\Logistics\Channel;
-
 
 use Wythe\Logistics\Exceptions\HttpException;
 
 class IckdChannel extends Channel
 {
+    protected $option = ['header' => ['referer: https://biz.trace.ickd.cn']];
+
     public function __construct()
     {
         $this->url = 'https://biz.trace.ickd.cn/auto/';
@@ -41,7 +42,7 @@ class IckdChannel extends Channel
      * @return array
      * @throws \Wythe\Logistics\Exceptions\HttpException
      */
-    public function get(string $code): array
+    public function request(string $code): array
     {
         try {
             $urlParams = [
@@ -53,8 +54,9 @@ class IckdChannel extends Channel
                 'callback' => '_jqjsp',
                 '_'.time()
             ];
-            $response = $this->request($this->url.$code, $urlParams, 0, ['referer: https://biz.trace.ickd.cn']);
-            $this->format($this->toArray($response));
+            $response = $this->get($this->url.$code, $urlParams, $this->option);
+            $this->toArray($response);
+            $this->format();
             return $this->response;
         } catch (\Exception $exception) {
             throw new HttpException($exception->getMessage());

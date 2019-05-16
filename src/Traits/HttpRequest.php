@@ -5,7 +5,7 @@
  * Date: 2018/12/28
  * Time: 22:31
  */
-
+declare(strict_types = 1);
 namespace Wythe\Logistics\Traits;
 
 use Wythe\Logistics\Exceptions\HttpException;
@@ -13,20 +13,90 @@ use Wythe\Logistics\Exceptions\HttpException;
 trait HttpRequest
 {
     /**
-     * curl调用(单线程)
+     * 设置cURL参数
+     *
+     * @param resource $handle
+     * @param array    $option
+     */
+    private function setCurlCommonOption($handle, array $option = [])
+    {
+        \curl_setopt($handle, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+        \curl_setopt($handle, CURLOPT_USERAGENT, $this->setUseragent());
+        \curl_setopt($handle, CURLOPT_CONNECTTIMEOUT, 30);
+        \curl_setopt($handle, CURLOPT_TIMEOUT, 30);
+        \curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
+        \curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
+        \curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, false);
+        if (!empty($option['header']) && is_array($option['header'])) {
+            \curl_setopt($handle, CURLOPT_HTTPHEADER, $option['header']);
+        }
+        if (!empty($option['proxy']) && is_array($option['proxy'])) {
+            \curl_setopt($handle, CURLOPT_PROXY, $option['proxy']);
+        }
+    }
+
+    /**
+     * 设置请求方式
+     *
+     * @param     $handle
+     * @param     $url
+     * @param     $params
+     * @param int $isPost
+     */
+    private function setCurlUrlMethod($handle, $url, $params, int $isPost = 0)
+    {
+        if ($isPost === 1) {
+            \curl_setopt($handle, CURLOPT_POST, true);
+            \curl_setopt($handle, CURLOPT_POSTFIELDS, $params);
+            \curl_setopt($handle, CURLOPT_URL, $url);
+        } else {
+            if (!empty($params)) {
+                if (is_array($params)) {
+                    $params = http_build_query($params);
+                }
+                \curl_setopt($handle, CURLOPT_URL, $url . '?' . $params);
+            } else {
+                \curl_setopt($handle, CURLOPT_URL, $url);
+            }
+        }
+    }
+
+    /**
+     * GET请求
      *
      * @param string       $url
      * @param string|array $params
-     * @param int          $isPost
-     * @param array        $header
+     * @param array        $option
      * @return string
      * @throws \Wythe\Logistics\Exceptions\HttpException
      */
-    protected function request($url, $params, int $isPost = 0, array $header = [])
+    protected function get($url, $params, array $option = [])
     {
         $handle = \curl_init();
-        $this->setCurlCommonOption($handle, $header);
-        $this->setCurlUrlMethod($handle, $url, $params, $isPost);
+        $this->setCurlCommonOption($handle, $option);
+        $this->setCurlUrlMethod($handle, $url, $params);
+        $response = \curl_exec($handle);
+        if ($response === false) {
+            throw new HttpException('请求接口发生错误');
+        }
+        \curl_close($handle);
+        return $response;
+    }
+
+    /**
+     * POST请求
+     *
+     * @param string       $url
+     * @param string|array $params
+     * @param array        $option
+     * @return bool|string
+     * @throws \Wythe\Logistics\Exceptions\HttpException
+     */
+    protected function post($url, $params, array $option = [])
+    {
+        $handle = \curl_init();
+        $this->setCurlCommonOption($handle, $option);
+        $this->setCurlUrlMethod($handle, $url, $params, 1);
         $response = \curl_exec($handle);
         if ($response === false) {
             throw new HttpException('请求接口发生错误');
@@ -64,71 +134,75 @@ trait HttpRequest
         return $collectionOfUseragent[$index];
     }
 
-
     /**
-     * 设置cURL参数
-     *
-     * @param resource $handle
-     * @param array    $header
-     */
-    private function setCurlCommonOption($handle, array $header = [])
-    {
-        if (!empty($header)) {
-            \curl_setopt($handle, CURLOPT_HTTPHEADER, $header);
-        }
-        \curl_setopt($handle, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-        \curl_setopt($handle, CURLOPT_USERAGENT, $this->setUseragent());
-        \curl_setopt($handle, CURLOPT_CONNECTTIMEOUT, 30);
-        \curl_setopt($handle, CURLOPT_TIMEOUT, 30);
-        \curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
-        \curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
-        \curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, false);
-    }
-
-
-
-    /**
-     * 设置请求方式
-     *
-     * @param     $handle
-     * @param     $url
-     * @param     $params
-     * @param int $isPost
-     */
-    private function setCurlUrlMethod($handle, $url, $params, int $isPost = 0)
-    {
-        if ($isPost === 1) {
-            \curl_setopt($handle, CURLOPT_POST, true);
-            \curl_setopt($handle, CURLOPT_POSTFIELDS, $params);
-            \curl_setopt($handle, CURLOPT_URL, $url);
-        } else {
-            if (!empty($params)) {
-                if (is_array($params)) {
-                    $params = http_build_query($params);
-                }
-                \curl_setopt($handle, CURLOPT_URL, $url . '?' . $params);
-            } else {
-                \curl_setopt($handle, CURLOPT_URL, $url);
-            }
-        }
-    }
-
-    /**
-     * curl 多线程调用
+     * GET 多线程请求
      *
      * @param array $urls
      * @param array $params
-     * @param int   $isPost
+     * @param array $option
      * @return array
      */
-    protected function requestWithUrls(array $urls = [], array $params = [], int $isPost = 0): array
+    protected function getByQueue(array $urls = [], array $params = [], array $option = []): array
     {
         $mh = \curl_multi_init();
-        $result = $responses = [];
+        $responses = [];
         foreach ($urls as $key => $url) {
             $handles[$key] = \curl_init();
-            $this->setCurlCommonOption($handles[$key]);
-            $this->setCurlUrlMethod($handles[$key], $url, $params[$key], $isPost);
+            if (!empty($option)) {
+                $this->setCurlCommonOption($handles[$key], $option);
+            } else {
+                $this->setCurlCommonOption($handles[$key]);
+            }
+            if (!empty($params)) {
+                $this->setCurlUrlMethod($handles[$key], $url, $params[$key]);
+            } else {
+                $this->setCurlUrlMethod($handles[$key], $url, '');
+            }
+            \curl_multi_add_handle($mh, $handles[$key]);
+        }
+        $active = null;
+        do {
+            while (($mrc = \curl_multi_exec($mh, $active)) == \CURLM_CALL_MULTI_PERFORM) ;
+            if ($mrc != \CURLM_OK) break;
+            while ($done = \curl_multi_info_read($mh)) {
+                $error = \curl_error($done['handle']);
+                $result = \curl_multi_getcontent($done['handle']);
+                $responses[] = compact( 'error', 'result');
+                \curl_multi_remove_handle($mh, $done['handle']);
+                \curl_close($done['handle']);
+            }
+            if ($active > 0) {
+                \curl_multi_select($mh);
+            }
+        } while ($active);
+        \curl_multi_close($mh);
+        return $responses;
+    }
+
+    /**
+     * POST 多线程请求
+     *
+     * @param array $urls
+     * @param array $params
+     * @param array $option
+     * @return array
+     */
+    protected function postByQueue(array $urls = [], array $params = [], array $option = []): array
+    {
+        $mh = \curl_multi_init();
+        $responses = [];
+        foreach ($urls as $key => $url) {
+            $handles[$key] = \curl_init();
+            if (!empty($option)) {
+                $this->setCurlCommonOption($handles[$key], $option);
+            } else {
+                $this->setCurlCommonOption($handles[$key]);
+            }
+            if (!empty($params)) {
+                $this->setCurlUrlMethod($handles[$key], $url, $params[$key], 1);
+            } else {
+                $this->setCurlUrlMethod($handles[$key], $url, '', 1);
+            }
             \curl_multi_add_handle($mh, $handles[$key]);
         }
         $active = null;

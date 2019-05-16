@@ -88,40 +88,10 @@ $logistics->query('12313131231', ['ickd']);
 ]
 ```
 
-## 百度接口获取物流信息
-```php
-$logistics->query('12313131231', 'baidu');
-$logistics->query('12313131231', ['baidu']);
-```
-示例:
-
-```php 
-[
-   'baidu' => [
-       'channel' => 'baidu',
-       'status' => 'success',
-       'result' => [
-           [
-               'status' => 200,
-               'message'  => 'OK',
-               'error_code' => 0,
-               'data' => [
-                   ['time' => '2019-01-09 12:11', 'description' => '仓库-已签收'],
-                   ['time' => '2019-01-09 12:11', 'description' => '广东XX服务点'],
-                   ['time' => '2019-01-09 12:11', 'description' => '广东XX转运中心']
-               ],
-               'logistics_company' => '申通快递',
-               'logistics_bill_no' => '12312211'
-           ]
-       ]
-   ]
-]
-```
-
 ## 多接口获取物流信息
 ```php
 $logistics->query('12313131231');
-$logistics->query('12313131231', ['kuaidi100', 'ickd', 'baidu']);
+$logistics->query('12313131231', ['kuaidi100', 'ickd']);
 ```
 示例:
 
@@ -170,24 +140,6 @@ $logistics->query('12313131231', ['kuaidi100', 'ickd', 'baidu']);
                 'logistics_bill_no' => '12312211'
            ]
        ]
-   ],
-   'baidu' => [
-       'channel' => 'baidu',
-       'status' => 'success',
-       'result' => [
-           [
-               'status' => 200,
-               'message'  => 'OK',
-               'error_code' => 0,
-               'data' => [
-                   ['time' => '2019-01-09 12:11', 'description' => '仓库-已签收'],
-                   ['time' => '2019-01-09 12:11', 'description' => '广东XX服务点'],
-                   ['time' => '2019-01-09 12:11', 'description' => '广东XX转运中心']
-               ],
-               'logistics_company' => '申通快递',
-               'logistics_bill_no' => '12312211'
-           ]
-       ]
    ]
 ]
 ```
@@ -195,14 +147,17 @@ $logistics->query('12313131231', ['kuaidi100', 'ickd', 'baidu']);
 ## 参数说明
 ```
 array query(string $code, $channels = ['kuaidi100'])
+array queryByProxy(array $proxy, string $code, $channels = ['kuaidi100'])
 ```
 
+* query 与 queryByProxy 返回数组结构是一样, 只是多了一个参数代理IP
+* $proxy - 代理地址 结构: ['proxy' => '代理IP:代理端口']
 * $code - 运单号
 * $channel - 渠道名称, 可选参数,默认快递 100.目前支持百度(baidu), 快递 100 (kuaidi 100), 爱查快递(ickd)
 
 ## 有关请求次数
-据测试随机生成 100 个运单循环请求, 目前没有限制. 但这些接口都是我抓包得来, 虽然我随机设置 user-agent,
-但是不够保险, 因此可能请求过多会有限制,就要更换 IP 来去请求.
+请求次数过于频繁, Kudidi100会封IP, 而ickd则不会, 但会返回错误信息, 假如需要请求多次, 则需要代理IP. 我试着抓免费代理IP
+基本上没一个可以用, 即使有用, 但存活时间很短. 因此只增加代理IP参数.
 
 ## 参考
 * [PHP 扩展包实战教程 - 从入门到发布](https://laravel-china.org/courses/creating-package)
@@ -210,12 +165,7 @@ array query(string $code, $channels = ['kuaidi100'])
 * [满足你的多种发送需求的短信发送组件(easy-sms)](https://github.com/overtrue/easy-sms)
 
 ## 最后
-感谢安正超 - 超哥提供教程, 让我知道如何构建一个包, 学习到很多东西. 
-其实我才做 PHP 没多久, 没想到有这么多人 star. 
-虽然现在才 121,但对我来说是一份认可, 谢谢.
-
 欢迎提出 issue 和 pull request
-
 
 ## License
 

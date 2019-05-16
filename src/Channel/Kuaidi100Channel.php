@@ -5,13 +5,10 @@
  * Date: 2018/12/24
  * Time: 21:37
  */
-
+declare(strict_types = 1);
 namespace Wythe\Logistics\Channel;
 
-
-use Wythe\Logistics\Exceptions\Exception;
 use Wythe\Logistics\Exceptions\HttpException;
-use Wythe\Logistics\Exceptions\InvalidArgumentException;
 
 class Kuaidi100Channel extends Channel
 {
@@ -34,7 +31,7 @@ class Kuaidi100Channel extends Channel
      * @return array
      * @throws \Wythe\Logistics\Exceptions\HttpException
      */
-    public function get(string $code): array
+    public function request(string $code): array
     {
         try {
             $companyCodes = $this->getCompanyCode($code);
@@ -43,8 +40,9 @@ class Kuaidi100Channel extends Channel
                 $urlParams[] = ['type' => $companyCode, 'postid' => $code];
                 $urls[] = $this->url;
             }
-            $response = $this->requestWithUrls($urls, $urlParams);
-            $this->format($this->toArray($response));
+            $response = $this->getByQueue($urls, $urlParams, $this->option);
+            $this->toArray($response);
+            $this->format();
             return $this->response;
         } catch (\Exception $exception) {
             throw new HttpException($exception->getMessage());
@@ -61,7 +59,7 @@ class Kuaidi100Channel extends Channel
     protected function getCompanyCode(string $code): array
     {
         $params = ['resultv2' => 1, 'text' => $code];
-        $response = $this->request($this->autoGetCompanyNameByUrl, $params);
+        $response = $this->get($this->autoGetCompanyNameByUrl, $params);
         $getCompanyInfo = \json_decode($response, true);
         if (!isset($getCompanyInfo['auto'])) {
             throw new HttpException('no company code');

@@ -5,7 +5,7 @@
  * Date: 2018/12/25
  * Time: 17:59
  */
-
+declare(strict_types = 1);
 namespace Wythe\Logistics\Exceptions;
 
 

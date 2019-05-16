@@ -6,18 +6,59 @@
  * Time: 21:32
  */
 
+declare(strict_types = 1);
 namespace Wythe\Logistics\Channel;
 
-use Wythe\Logistics\Exceptions\HttpException;
 use Wythe\Logistics\Traits\HttpRequest;
 
 abstract class Channel
 {
+    /**
+     * HTTP 请求
+     */
     use HttpRequest;
 
+    /**
+     * 渠道URL
+     *
+     * @var string
+     */
     protected $url;
 
+    /**
+     * 请求资源
+     *
+     * @var array
+     */
     protected $response;
+
+    /**
+     * 请求选项
+     *
+     * @var array
+     */
+    protected $option = [];
+
+    /**
+     * 设置请求选项
+     *
+     * @param array $option
+     * @return \Wythe\Logistics\Channel\Channel
+     */
+    public function setRequestOption(array $option): Channel
+    {
+        if (!empty($this->option)) {
+            if (isset($option['header']) && isset($this->option['header'])) {
+                $this->option['header'] = array_merge($this->option['header'], $option['header']);
+            }
+            if (isset($option['proxy'])) {
+                $this->option['proxy'] = $option['proxy'];
+            }
+        } else {
+            $this->option = $option;
+        }
+        return $this;
+    }
 
     /**
      * 调用查询接口
@@ -25,7 +66,7 @@ abstract class Channel
      * @param string $code
      * @return array
      */
-    abstract public function get(string $code):array ;
+    abstract public function request(string $code):array ;
 
     /**
      * 转换为数组

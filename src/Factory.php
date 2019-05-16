@@ -5,7 +5,7 @@
  * Date: 2018/12/28
  * Time: 22:46
  */
-
+declare(strict_types = 1);
 namespace Wythe\Logistics;
 
 use Wythe\Logistics\Exceptions\InvalidArgumentException;
@@ -14,7 +14,7 @@ use Wythe\Logistics\Channel\Channel;
 
 class Factory
 {
-    private $defaultChannel = 'baidu';
+    private $defaultChannel = 'kuaidi100';
 
     protected $channels = [];
 
