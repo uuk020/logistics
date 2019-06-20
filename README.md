@@ -4,6 +4,10 @@
 
 [![Build Status](https://travis-ci.org/uuk020/logistics.svg?branch=master)](https://travis-ci.org/uuk020/logistics)
 
+## Bug
+- 快递100接口变动, 多了几个参数, 尤其是temp参数是由JavaScript里的Math.random()生成, 我尝试控制台生成几个去请求还是失败, 不知道他如何验证的.
+
+
 ## 环境需求
 * PHP >= 7.0
 
