@@ -4,6 +4,9 @@
 
 [![Build Status](https://travis-ci.org/uuk020/logistics.svg?branch=master)](https://travis-ci.org/uuk020/logistics)
 
+## 声明
+抱歉, 花了一天时间还是未能解决快递100问题. 因此需要修改成配置的, 重新重构此扩展包, 需要一天时间. 假如你在项目使用此扩展, 导致查询快递错误, 本人在此十分歉意. 
+
 ## 环境需求
 * PHP >= 7.0
 
@@ -14,7 +17,7 @@ $ composer require wythe/logistics -vvv
 ```
 
 ## Bug
-- 快递100接口变动, 多了几个参数, 尤其是temp参数是由JavaScript里的Math.random()生成, 我尝试控制台生成几个去请求还是失败, 暂时无法解决.
+- 快递100接口变动, 多了几个参数, 尤其是temp参数是由JavaScript里的Math.random()生成, 我尝试控制台生成几个去请求还是失败, 好像有temp参数无关,  暂时无法解决.
 
 ## 使用
 ```php
