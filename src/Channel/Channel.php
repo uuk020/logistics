@@ -9,6 +9,7 @@
 declare(strict_types = 1);
 namespace Wythe\Logistics\Channel;
 
+use Wythe\Logistics\ConfigLocal;
 use Wythe\Logistics\Traits\HttpRequest;
 
 abstract class Channel
@@ -61,12 +62,36 @@ abstract class Channel
     }
 
     /**
+     * 获取实例化的类名称
+     *
+     * @return string
+     */
+    protected function getClassName(): string
+    {
+        $className = basename(str_replace('\\', '/' , (get_class($this))));
+        return preg_replace('/Channel/', "", $className);
+    }
+
+    /**
+     * 获取配置
+     *
+     * @return array
+     */
+    protected function getChannelConfig(): array
+    {
+        $key = $this->getClassName();
+        $config = (new ConfigLocal())->getConfig(strtolower($key));
+        return $config;
+    }
+
+    /**
      * 调用查询接口
      *
      * @param string $code
+     * @param string $company
      * @return array
      */
-    abstract public function request(string $code):array ;
+    abstract public function request(string $code, string $company = ''): array;
 
     /**
      * 转换为数组

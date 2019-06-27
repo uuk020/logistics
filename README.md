@@ -1,8 +1,13 @@
 <h1 align="center"> Logistics </h1>
 
-<p align="center">无需授权和配置, 简单便捷查询运单快递信息</p>
+<p align="center">简单便捷查询运单快递信息</p>
 
 [![Build Status](https://travis-ci.org/uuk020/logistics.svg?branch=master)](https://travis-ci.org/uuk020/logistics)
+[![Latest Stable Version](https://poser.pugx.org/wythe/logistics/v/stable)](https://packagist.org/packages/wythe/logistics)
+[![Total Downloads](https://poser.pugx.org/wythe/logistics/downloads)](https://packagist.org/packages/wythe/logistics)
+[![Latest Unstable Version](https://poser.pugx.org/wythe/logistics/v/unstable)](https://packagist.org/packages/wythe/logistics)
+[![License](https://poser.pugx.org/wythe/logistics/license)](https://packagist.org/packages/wythe/logistics)
+
 
 ## 声明
 抱歉, 花了一天时间还是未能解决快递100问题. 因此需要修改成配置的, 重新重构此扩展包, 需要一天时间. 假如你在项目使用此扩展, 导致查询快递错误, 本人在此十分歉意. 

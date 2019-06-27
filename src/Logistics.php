@@ -12,6 +12,13 @@ use Wythe\Logistics\Exceptions\NoQueryAvailableException;
 class Logistics
 {
     /**
+     * 渠道接口总数
+     *
+     * @var int
+     */
+    const CHANNEL_NUMBER = 7;
+
+    /**
      * 成功
      *
      * @var string
@@ -45,11 +52,12 @@ class Logistics
      *
      * @param string $code
      * @param array  $channels
+     * @param string $company
      * @return array
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
      */
-    public function query(string $code, $channels = ['kuaidi100']): array
+    public function query(string $code, $channels = ['kuaidiBird'], string $company = ''): array
     {
         $results = [];
         if (empty($code)) {
@@ -63,7 +71,7 @@ class Logistics
                 $results[$channel] = [
                     'channel' => $channel,
                     'status' => self::SUCCESS,
-                    'result' => $this->factory->createChannel($channel)->request($code),
+                    'result' => $this->factory->createChannel($channel)->request($code, $company),
                 ];
             } catch (\Exception $exception) {
                 $results[$channel] = [
@@ -74,7 +82,7 @@ class Logistics
             }
         }
         $collectionOfException = array_column($results, 'exception');
-        if (count($collectionOfException) === 3) {
+        if (count($collectionOfException) === self::CHANNEL_NUMBER) {
             throw new NoQueryAvailableException('sorry! no channel class available');
         }
         return $results;
@@ -86,11 +94,12 @@ class Logistics
      * @param array  $proxy
      * @param string $code
      * @param array  $channels
+     * @param string $company
      * @return array
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
      */
-    public function queryByProxy(array $proxy, string $code, $channels = ['kuaidi100']): array
+    public function queryByProxy(array $proxy, string $code, $channels = ['kuaidiBird'], string $company = ''): array
     {
         $results = [];
         if (empty($code)) {
@@ -104,7 +113,7 @@ class Logistics
                 $results[$channel] = [
                     'channel' => $channel,
                     'status' => self::SUCCESS,
-                    'result' => $this->factory->createChannel($channel)->setRequestOption($proxy)->request($code),
+                    'result' => $this->factory->createChannel($channel)->setRequestOption($proxy)->request($code, $company),
                 ];
             } catch (\Exception $exception) {
                 $results[$channel] = [
@@ -115,7 +124,7 @@ class Logistics
             }
         }
         $collectionOfException = array_column($results, 'exception');
-        if (count($collectionOfException) === 3) {
+        if (count($collectionOfException) === self::CHANNEL_NUMBER) {
             throw new NoQueryAvailableException('sorry! no channel class available');
         }
         return $results;

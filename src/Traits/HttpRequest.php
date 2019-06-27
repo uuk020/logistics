@@ -41,23 +41,16 @@ trait HttpRequest
      * @param     $handle
      * @param     $url
      * @param     $params
-     * @param int $isPost
      */
-    private function setCurlUrlMethod($handle, $url, $params, int $isPost = 0)
+    private function setCurlUrlMethod($handle, $url, $params)
     {
-        if ($isPost === 1) {
-            \curl_setopt($handle, CURLOPT_POST, true);
-            \curl_setopt($handle, CURLOPT_POSTFIELDS, $params);
-            \curl_setopt($handle, CURLOPT_URL, $url);
-        } else {
-            if (!empty($params)) {
-                if (is_array($params)) {
-                    $params = http_build_query($params);
-                }
-                \curl_setopt($handle, CURLOPT_URL, $url . '?' . $params);
-            } else {
-                \curl_setopt($handle, CURLOPT_URL, $url);
+        if (!empty($params)) {
+            if (is_array($params)) {
+                $params = http_build_query($params);
             }
+            \curl_setopt($handle, CURLOPT_URL, $url . '?' . $params);
+        } else {
+            \curl_setopt($handle, CURLOPT_URL, $url);
         }
     }
 

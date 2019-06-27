@@ -13,27 +13,16 @@ use Wythe\Logistics\Exceptions\InvalidArgumentException;
 use Wythe\Logistics\Exceptions\NoQueryAvailableException;
 use Wythe\Logistics\Factory;
 use Wythe\Logistics\Logistics;
+use Wythe\Logistics\SupportLogistics;
 
 class LogisticsTest extends TestCase
 {
-    /**
-     * 测试设置默认渠道接口
-     *
-     * @throws \Wythe\Logistics\Exceptions\Exception
-     */
-    public function testSetFactoryDefault()
-    {
-        $factory = new Factory();
-        $factory->setDefault('kuaidi');
-        $this->assertSame('kuaidi', $factory->getDefault());
-    }
-
     /**
      * 测试不传参数
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
      */
-    public function testQueryWithInvalidParams()
+    public function testChannelWithInvalidParams()
     {
         $l = new Logistics();
         $this->expectException(InvalidArgumentException::class);
@@ -47,7 +36,7 @@ class LogisticsTest extends TestCase
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
      */
-    public function testQueryWithQueryClass()
+    public function testChannelWithChannelClass()
     {
         $response = [
             'kuaidBird' => [
@@ -62,46 +51,16 @@ class LogisticsTest extends TestCase
     }
 
     /**
-     * 测试百度渠道
-     *
-     * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
-     * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
-     */
-    public function testQueryByBaidu()
-    {
-        $response = [
-            'baidu' => [
-                'channel' => 'baidu',
-                'status' => 'success',
-                'result' => [
-                    'status' => 0,
-                    'message'  => 'OK',
-                    'error_code' => 0,
-                    'data' => [
-                        ['time' => '2019-01-09 12:11', 'desc' => '仓库-已签收'],
-                        ['time' => '2019-01-09 12:11', 'desc' => '广东XX服务点'],
-                        ['time' => '2019-01-09 12:11', 'desc' => '广东XX转运中心']
-                    ],
-                    'logistics_company' => '申通快递',
-                ]
-            ],
-        ];
-        $logistics = \Mockery::mock(Logistics::class);
-        $logistics->shouldReceive('query')->andReturn($response);
-        $this->assertSame($response, $logistics->query('12312211', 'baidu'));
-    }
-
-    /**
      * 测试快递100渠道
      *
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
      */
-    public function testQueryByKuaidi100()
+    public function testChannelByKuaidi100()
     {
         $kuaidiResponse = [
             'kuaidi100' => [
-                'channel' => 'kuaidi100',
+                'channel' => 'kuaiDi100',
                 'status' => 'success',
                 'result' => [
                     [
@@ -109,27 +68,19 @@ class LogisticsTest extends TestCase
                         'message'  => 'OK',
                         'error_code' => 0,
                         'data' => [
-                            ['time' => '1545444420', 'description' => '仓库-已签收'],
-                            ['time' => '1545441977', 'description' => '广东XX服务点'],
-                            ['time' => '1545438199', 'description' => '广东XX转运中心']
+                            ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
                         ],
                         'logistics_company' => '申通快递',
                         'logistics_bill_no' => '12312211'
-                    ],
-                    [
-                        'status' => 201,
-                        'message' => '快递公司参数异常：单号不存在或者已经过期',
-                        'error_code' => 0,
-                        'data' => '',
-                        'logistics_company' => '',
-                        'logistics_bill_no' => ''
                     ]
                 ]
             ],
         ];
         $logistics = \Mockery::mock(Logistics::class);
         $logistics->shouldReceive('query')->andReturn($kuaidiResponse);
-        $this->assertSame($kuaidiResponse, $logistics->query('12312211', 'kuaidi100'));
+        $this->assertSame($kuaidiResponse, $logistics->query('12312211', 'kuaidi100', '申通'));
     }
 
     /**
@@ -138,7 +89,7 @@ class LogisticsTest extends TestCase
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
      */
-    public function testQueryByIckd()
+    public function testChannelByIckd()
     {
         $response = [
             'ickd' => [
@@ -150,9 +101,9 @@ class LogisticsTest extends TestCase
                         'message'  => 'OK',
                         'error_code' => 0,
                         'data' => [
-                            ['time' => '1545444420', 'description' => '仓库-已签收'],
-                            ['time' => '1545441977', 'description' => '广东XX服务点'],
-                            ['time' => '1545438199', 'description' => '广东XX转运中心']
+                            ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
                         ],
                         'logistics_company' => '申通快递',
                         'logistics_bill_no' => '12312211'
@@ -165,32 +116,17 @@ class LogisticsTest extends TestCase
         $this->assertSame($response, $logistics->query('12312211', 'ickd'));
     }
 
-
     /**
-     * 测试全部渠道
+     * 测试极速数据
      *
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
      */
-    public function testQueryByBoth()
+    public function testChannelByJiSu()
     {
         $response = [
-            'baidu' => [
-                'channel' => 'baidu',
-                'status' => 'success',
-                'result' => [
-                    [
-                        'status' => 200,
-                        'message'  => '抱歉，查询出错，请重试或点击快递公司官网地址进行查询',
-                        'error_code' => 0,
-                        'data' => '',
-                        'logistics_company' => '申通快递',
-                        'logistics_bill_no' => '12312211'
-                    ]
-                ]
-            ],
-            'kuaidi100' => [
-                'channel' => 'kuaidi100',
+            'jiSu' => [
+                'channel' => 'jiSu',
                 'status' => 'success',
                 'result' => [
                     [
@@ -198,20 +134,217 @@ class LogisticsTest extends TestCase
                         'message'  => 'OK',
                         'error_code' => 0,
                         'data' => [
-                            ['time' => '1545444420', 'description' => '仓库-已签收'],
-                            ['time' => '1545441977', 'description' => '广东XX服务点'],
-                            ['time' => '1545438199', 'description' => '广东XX转运中心']
+                            ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
                         ],
                         'logistics_company' => '申通快递',
                         'logistics_bill_no' => '12312211'
-                    ],
+                    ]
+                ]
+            ]
+        ];
+        $logistics = \Mockery::mock(Logistics::class);
+        $logistics->shouldReceive('query')->andReturn($response);
+        $this->assertSame($response, $logistics->query('12312211', 'jiSu'));
+    }
+
+    /**
+     * 测试聚合数据
+     *
+     * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
+     * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
+     */
+    public function testChannelByJuHe()
+    {
+        $response = [
+            'juHe' => [
+                'channel' => 'juHe',
+                'status' => 'success',
+                'result' => [
                     [
-                        'status' => 201,
-                        'message' => '快递公司参数异常：单号不存在或者已经过期',
+                        'status' => 200,
+                        'message'  => 'OK',
                         'error_code' => 0,
-                        'data' => '',
-                        'logistics_company' => '',
-                        'logistics_bill_no' => ''
+                        'data' => [
+                            ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
+                        ],
+                        'logistics_company' => '申通快递',
+                        'logistics_bill_no' => '12312211'
+                    ]
+                ]
+            ]
+        ];
+        $logistics = \Mockery::mock(Logistics::class);
+        $logistics->shouldReceive('query')->andReturn($response);
+        $this->assertSame($response, $logistics->query('12312211', 'juHe', '申通'));
+    }
+
+    /**
+     * 测试数据智汇
+     *
+     * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
+     * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
+     */
+    public function testChannelByShuJu()
+    {
+        $response = [
+            'shuJuZhiHui' => [
+                'channel' => 'shuJuZhiHui',
+                'status' => 'success',
+                'result' => [
+                    [
+                        'status' => 200,
+                        'message'  => 'OK',
+                        'error_code' => 0,
+                        'data' => [
+                            ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
+                        ],
+                        'logistics_company' => '申通快递',
+                        'logistics_bill_no' => '12312211'
+                    ]
+                ]
+            ]
+        ];
+        $logistics = \Mockery::mock(Logistics::class);
+        $logistics->shouldReceive('query')->andReturn($response);
+        $this->assertSame($response, $logistics->query('12312211', 'shuJuZhiHui', '申通'));
+    }
+
+    /**
+     * 测试快递鸟
+     *
+     * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
+     * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
+     */
+    public function testChannelByKuaiDiBird()
+    {
+        $response = [
+            'kuaiDiBird' => [
+                'channel' => 'kuaiDiBird',
+                'status' => 'success',
+                'result' => [
+                    [
+                        'status' => 200,
+                        'message'  => 'OK',
+                        'error_code' => 0,
+                        'data' => [
+                            ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
+                        ],
+                        'logistics_company' => '申通快递',
+                        'logistics_bill_no' => '12312211'
+                    ]
+                ]
+            ]
+        ];
+        $logistics = \Mockery::mock(Logistics::class);
+        $logistics->shouldReceive('query')->andReturn($response);
+        $this->assertSame($response, $logistics->query('12312211', 'juHe', '申通'));
+    }
+
+
+    /**
+     * 测试全部渠道
+     *
+     * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
+     * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
+     */
+    public function testChannelByBoth()
+    {
+        $response = [
+            'kuaidi100' => [
+                'channel' => 'kuaiDi100',
+                'status' => 'success',
+                'result' => [
+                    [
+                        'status' => 200,
+                        'message'  => 'OK',
+                        'error_code' => 0,
+                        'data' => [
+                            ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
+                        ],
+                        'logistics_company' => '申通快递',
+                        'logistics_bill_no' => '12312211'
+                    ]
+                ]
+            ],
+            'kuaiDiBird' => [
+                'channel' => 'kuaiDiBird',
+                'status' => 'success',
+                'result' => [
+                    [
+                        'status' => 200,
+                        'message'  => 'OK',
+                        'error_code' => 0,
+                        'data' => [
+                            ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
+                        ],
+                        'logistics_company' => '申通快递',
+                        'logistics_bill_no' => '12312211'
+                    ]
+                ]
+            ],
+            'juHe' => [
+                'channel' => 'juHe',
+                'status' => 'success',
+                'result' => [
+                    [
+                        'status' => 200,
+                        'message'  => 'OK',
+                        'error_code' => 0,
+                        'data' => [
+                            ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
+                        ],
+                        'logistics_company' => '申通快递',
+                        'logistics_bill_no' => '12312211'
+                    ]
+                ]
+            ],
+            'jiSu' => [
+                'channel' => 'jiSu',
+                'status' => 'success',
+                'result' => [
+                    [
+                        'status' => 200,
+                        'message'  => 'OK',
+                        'error_code' => 0,
+                        'data' => [
+                            ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
+                        ],
+                        'logistics_company' => '申通快递',
+                        'logistics_bill_no' => '12312211'
+                    ]
+                ]
+            ],
+            'shuJuZhiHui' => [
+                'channel' => 'shuJuZhiHui',
+                'status' => 'success',
+                'result' => [
+                    [
+                        'status' => 200,
+                        'message'  => 'OK',
+                        'error_code' => 0,
+                        'data' => [
+                            ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
+                        ],
+                        'logistics_company' => '申通快递',
+                        'logistics_bill_no' => '12312211'
                     ]
                 ]
             ],
@@ -224,21 +357,21 @@ class LogisticsTest extends TestCase
                         'message'  => 'OK',
                         'error_code' => 0,
                         'data' => [
-                            ['time' => '1545444420', 'description' => '仓库-已签收'],
-                            ['time' => '1545441977', 'description' => '广东XX服务点'],
-                            ['time' => '1545438199', 'description' => '广东XX转运中心']
+                            ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
                         ],
                         'logistics_company' => '申通快递',
                         'logistics_bill_no' => '12312211'
                     ]
                 ]
             ],
+
         ];
         $logistics = \Mockery::mock(Logistics::class);
         $logistics->shouldReceive('query')->andReturn($response);
-        $this->assertSame($response, $logistics->query('12312211', ['baidu', 'kuaidi100', 'ickd']));
+        $this->assertSame($response, $logistics->query('12312211', ['kuaiDi100', 'kuaiDiBird', 'juHe', 'jiShu',
+            'shuJuZhiHui', 'ickd'], '申通'));
     }
-
-
 
 }

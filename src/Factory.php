@@ -14,7 +14,7 @@ use Wythe\Logistics\Channel\Channel;
 
 class Factory
 {
-    private $defaultChannel = 'kuaidi100';
+    private $defaultChannel = 'kuaiDiBird';
 
     protected $channels = [];
 
