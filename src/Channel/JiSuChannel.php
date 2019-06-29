@@ -3,17 +3,26 @@
  * Created by PhpStorm.
  * User: WytheHuang
  * Date: 2019/6/23
- * Time: 14:34
+ * Time: 14:34.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
+
+/*
+ * This file is part of the uuk020/logistics.
+ *
+ * (c) WytheHuang<wythe.huangw@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Wythe\Logistics\Channel;
 
 use Wythe\Logistics\Exceptions\HttpException;
 
 /**
- * 极速数据物流查询
- * @package Wythe\Logistics\Channel
+ * 极速数据物流查询.
  */
 class JiSuChannel extends Channel
 {
@@ -23,7 +32,7 @@ class JiSuChannel extends Channel
     public function __construct()
     {
         $config = $this->getChannelConfig();
-        $this->url = 'https://api.jisuapi.com/express/query?appkey=' . $config['app_key'];
+        $this->url = 'https://api.jisuapi.com/express/query?appkey='.$config['app_key'];
     }
 
     /**
@@ -31,7 +40,9 @@ class JiSuChannel extends Channel
      *
      * @param string $code
      * @param string $company
+     *
      * @return array
+     *
      * @throws \Wythe\Logistics\Exceptions\HttpException
      */
     public function request(string $code, string $company = ''): array
@@ -41,6 +52,7 @@ class JiSuChannel extends Channel
             $response = $this->get($this->url, $params);
             $this->toArray($response);
             $this->format();
+
             return $this->response;
         } catch (HttpException $exception) {
             throw new HttpException($exception->getMessage());
@@ -48,9 +60,7 @@ class JiSuChannel extends Channel
     }
 
     /**
-     * 统一物流信息
-     *
-     * @return void
+     * 统一物流信息.
      */
     protected function format()
     {
@@ -64,7 +74,7 @@ class JiSuChannel extends Channel
     }
 
     /**
-     * 转为数组
+     * 转为数组.
      *
      * @param array|string $response
      */
@@ -77,16 +87,16 @@ class JiSuChannel extends Channel
                 'message' => '请求发生不知名错误, 查询不到物流信息',
                 'error_code' => 0,
                 'data' => [],
-                'logistics_company' => ''
+                'logistics_company' => '',
             ];
         } else {
-            if ($jsonToArray['status'] === 0) {
+            if (0 === $jsonToArray['status']) {
                 $this->response = [
                     'status' => 1,
                     'message' => 'ok',
                     'error_code' => 0,
                     'data' => $jsonToArray['result']['list'],
-                    'logistics_company' => ''
+                    'logistics_company' => '',
                 ];
             } else {
                 $this->response = [
@@ -94,7 +104,7 @@ class JiSuChannel extends Channel
                     'message' => $jsonToArray['msg'],
                     'error_code' => $jsonToArray['status'],
                     'data' => [],
-                    'logistics_company' => ''
+                    'logistics_company' => '',
                 ];
             }
         }
