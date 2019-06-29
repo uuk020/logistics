@@ -3,15 +3,24 @@
  * Created by PhpStorm.
  * User: WytheHuang
  * Date: 2019/6/23
- * Time: 0:17
+ * Time: 0:17.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
+
+/*
+ * This file is part of the uuk020/logistics.
+ *
+ * (c) WytheHuang<wythe.huangw@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Wythe\Logistics\Channel;
 
 /**
- * 聚合数据 查询物流接口
- * @package Wythe\Logistics\Channel
+ * 聚合数据 查询物流接口.
  */
 class JuHeChannel extends Channel
 {
@@ -24,17 +33,20 @@ class JuHeChannel extends Channel
     }
 
     /**
-     * 构造请求参数
+     * 构造请求参数.
      *
      * @param string $code
      * @param string $company
+     *
      * @return array
+     *
      * @throws \Wythe\Logistics\Exceptions\HttpException
      */
     private function setRequestParam(string $code, string $company): array
     {
         $config = $this->getChannelConfig();
         $companyCode = (new \Wythe\Logistics\SupportLogistics())->getCode($this->getClassName(), $code, $company);
+
         return ['key' => $config['app_key'], 'com' => $companyCode];
     }
 
@@ -43,7 +55,9 @@ class JuHeChannel extends Channel
      *
      * @param string $code
      * @param string $company
+     *
      * @return array
+     *
      * @throws \Exception
      */
     public function request(string $code, string $company = ''): array
@@ -54,6 +68,7 @@ class JuHeChannel extends Channel
             $response = $this->get($this->url, $params);
             $this->toArray($response);
             $this->format();
+
             return $this->response;
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());
@@ -61,7 +76,7 @@ class JuHeChannel extends Channel
     }
 
     /**
-     * 转换为数组
+     * 转换为数组.
      *
      * @param array|string $response
      */
@@ -74,16 +89,16 @@ class JuHeChannel extends Channel
                 'message' => '请求发生不知名错误, 查询不到物流信息',
                 'error_code' => 0,
                 'data' => [],
-                'logistics_company' => ''
+                'logistics_company' => '',
             ];
         } else {
-            if ($jsonToArray['error_code'] === 0) {
+            if (0 === $jsonToArray['error_code']) {
                 $this->response = [
                     'status' => 1,
                     'message' => 'ok',
                     'error_code' => 0,
                     'data' => $jsonToArray['result']['list'],
-                    'logistics_company' => $jsonToArray['result']['company']
+                    'logistics_company' => $jsonToArray['result']['company'],
                 ];
             } else {
                 $this->response = [
@@ -91,16 +106,14 @@ class JuHeChannel extends Channel
                     'message' => $jsonToArray['reason'],
                     'error_code' => $jsonToArray['error_code'],
                     'data' => [],
-                    'logistics_company' => ''
+                    'logistics_company' => '',
                 ];
             }
         }
     }
 
     /**
-     * 格式化数组
-     *
-     * @return void
+     * 格式化数组.
      */
     protected function format()
     {

@@ -1,25 +1,25 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: WytheHuang
- * Date: 2019/6/26
- * Time: 23:01
+
+/*
+ * This file is part of the uuk020/logistics.
+ *
+ * (c) WytheHuang<wythe.huangw@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 namespace Wythe\Logistics\Tests;
 
-
 use PHPUnit\Framework\TestCase;
 use Wythe\Logistics\Channel\JiSuChannel;
-use Wythe\Logistics\Exceptions\InvalidArgumentException;
 use Wythe\Logistics\Factory;
-use Wythe\Logistics\Logistics;
 use Wythe\Logistics\SupportLogistics;
 
 class CommonMethodTest extends TestCase
 {
     /**
-     * 测试设置默认渠道接口
+     * 测试设置默认渠道接口.
      *
      * @throws \Wythe\Logistics\Exceptions\Exception
      */
@@ -31,7 +31,7 @@ class CommonMethodTest extends TestCase
     }
 
     /**
-     * 测试获取类名称
+     * 测试获取类名称.
      */
     public function testClassName()
     {
