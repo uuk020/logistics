@@ -38,7 +38,7 @@ class JiSuChannel extends Channel
     {
         try {
             $params = ['type' => 'auto', 'number' => $code];
-            $response = $this->post($this->url, $params);
+            $response = $this->get($this->url, $params);
             $this->toArray($response);
             $this->format();
             return $this->response;

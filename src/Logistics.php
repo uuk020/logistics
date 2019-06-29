@@ -68,11 +68,20 @@ class Logistics
         }
         foreach ($channels as $channel) {
             try {
-                $results[$channel] = [
-                    'channel' => $channel,
-                    'status' => self::SUCCESS,
-                    'result' => $this->factory->createChannel($channel)->request($code, $company),
-                ];
+                $request = $this->factory->createChannel($channel)->request($code, $company);
+                if ($request['status'] === 1) {
+                    $results[$channel] = [
+                        'channel' => $channel,
+                        'status' => self::SUCCESS,
+                        'result' => $request,
+                    ];
+                } else {
+                    $results[$channel] = [
+                        'channel' => $channel,
+                        'status' => self::FAILURE,
+                        'exception' => $request['message'],
+                    ];
+                }
             } catch (\Exception $exception) {
                 $results[$channel] = [
                     'channel' => $channel,
@@ -110,11 +119,20 @@ class Logistics
         }
         foreach ($channels as $channel) {
             try {
-                $results[$channel] = [
-                    'channel' => $channel,
-                    'status' => self::SUCCESS,
-                    'result' => $this->factory->createChannel($channel)->setRequestOption($proxy)->request($code, $company),
-                ];
+                $request = $this->factory->createChannel($channel)->request($code, $company);
+                if ($request['status'] === 1) {
+                    $results[$channel] = [
+                        'channel' => $channel,
+                        'status' => self::SUCCESS,
+                        'result' => $request,
+                    ];
+                } else {
+                    $results[$channel] = [
+                        'channel' => $channel,
+                        'status' => self::FAILURE,
+                        'exception' => $request['message'],
+                    ];
+                }
             } catch (\Exception $exception) {
                 $results[$channel] = [
                     'channel' => $channel,

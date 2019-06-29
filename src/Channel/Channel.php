@@ -9,7 +9,7 @@
 declare(strict_types = 1);
 namespace Wythe\Logistics\Channel;
 
-use Wythe\Logistics\ConfigLocal;
+use Wythe\Logistics\Config;
 use Wythe\Logistics\Traits\HttpRequest;
 
 abstract class Channel
@@ -80,7 +80,7 @@ abstract class Channel
     protected function getChannelConfig(): array
     {
         $key = $this->getClassName();
-        $config = (new ConfigLocal())->getConfig(strtolower($key));
+        $config = (new Config())->getConfig(strtolower($key));
         return $config;
     }
 

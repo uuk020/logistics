@@ -81,6 +81,7 @@ class SupportLogistics
         $url = 'http://m.kuaidi100.com/autonumber/autoComNum';
         $params = ['resultv2' => 1, 'text' => $code];
         $companyCode = '';
+        $channelName = strtolower($channel);
         $companyCodeInfo = $this->get($url, $params);
         $companyCodeArr = \json_decode($companyCodeInfo, true);
         if (isset($companyCodeArr['auto'])) {
@@ -89,12 +90,12 @@ class SupportLogistics
         }
         foreach ($this->companyList as $name => $item) {
             if (isset($kuaidi100CompanyCode) && $item['kuaidi100'] === $kuaidi100CompanyCode) {
-                $companyCode = $item[$channel];
+                $companyCode = $item[$channelName];
             } else {
                 if ($companyName) {
                     $pattern = "/($name)(\w+)/i";
                     if (\preg_match($pattern, $companyName) === 1) {
-                        $companyCode = $this->companyList[$name][$channel];
+                        $companyCode = $this->companyList[$name][$channelName];
                     }
                 }
             }

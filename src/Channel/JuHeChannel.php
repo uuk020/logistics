@@ -8,7 +8,6 @@
 
 declare(strict_types = 1);
 namespace Wythe\Logistics\Channel;
-use Wythe\Logistics\Exceptions\InvalidArgumentException;
 
 /**
  * 聚合数据 查询物流接口
@@ -50,7 +49,6 @@ class JuHeChannel extends Channel
     public function request(string $code, string $company = ''): array
     {
         try {
-            if (empty($company)) throw new InvalidArgumentException('参数错误, 缺少物流公司名称');
             $params = $this->setRequestParam($code, $company);
             $params['no'] = $code;
             $response = $this->get($this->url, $params);
@@ -90,8 +88,8 @@ class JuHeChannel extends Channel
             } else {
                 $this->response = [
                     'status' => 0,
-                    'message' => $this->errorMessage[$jsonToArray['error_code']],
-                    'error_code' => $jsonToArray['reason'],
+                    'message' => $jsonToArray['reason'],
+                    'error_code' => $jsonToArray['error_code'],
                     'data' => [],
                     'logistics_company' => ''
                 ];

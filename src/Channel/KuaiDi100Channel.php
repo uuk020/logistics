@@ -9,8 +9,6 @@
 declare(strict_types = 1);
 namespace Wythe\Logistics\Channel;
 
-use Wythe\Logistics\Exceptions\InvalidArgumentException;
-
 class KuaiDi100Channel extends Channel
 {
     /**
@@ -34,7 +32,6 @@ class KuaiDi100Channel extends Channel
     public function request(string $code, string $company = ''): array
     {
         try {
-            if (empty($company)) throw new InvalidArgumentException('参数错误, 缺少物流公司名称');
             $companyCode = (new \Wythe\Logistics\SupportLogistics())->getCode($this->getClassName(), $code, $company);
             $postJson = \json_encode([
                 'num' => $code,

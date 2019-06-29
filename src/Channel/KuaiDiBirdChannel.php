@@ -81,7 +81,6 @@ class KuaiDiBirdChannel extends Channel
     public function request(string $code, string $company = ''): array
     {
         try {
-            if (empty($company)) throw new \Wythe\Logistics\Exceptions\InvalidArgumentException('参数错误, 缺少物流公司名称');
             $companyCode = (new \Wythe\Logistics\SupportLogistics())->getCode($this->getClassName(), $code, $company);
             $requestData = $this->setRequestParam(\json_encode(['OrderCode' => '', 'ShipperCode' => $companyCode, 'LogisticCode' => $code]));
             $response = $this->post($this->url, $requestData, ['header' => 'application/x-www-form-urlencoded;charset=utf-8']);
