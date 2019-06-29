@@ -3,6 +3,7 @@
 <p align="center">简单便捷查询运单快递信息</p>
 
 [![Build Status](https://travis-ci.org/uuk020/logistics.svg?branch=master)](https://travis-ci.org/uuk020/logistics)
+![StyleCI build status](https://github.styleci.io/repos/163085695/shield)
 [![Latest Stable Version](https://poser.pugx.org/wythe/logistics/v/stable)](https://packagist.org/packages/wythe/logistics)
 [![Total Downloads](https://poser.pugx.org/wythe/logistics/downloads)](https://packagist.org/packages/wythe/logistics)
 [![Latest Unstable Version](https://poser.pugx.org/wythe/logistics/v/unstable)](https://packagist.org/packages/wythe/logistics)
