@@ -9,6 +9,9 @@
 [![Latest Unstable Version](https://poser.pugx.org/wythe/logistics/v/unstable)](https://packagist.org/packages/wythe/logistics)
 [![License](https://poser.pugx.org/wythe/logistics/license)](https://packagist.org/packages/wythe/logistics)
 
+### 重构版本
+1.0.0
+
 ### 支持查询接口平台
 
 | 平台 | 次数 | 是否需要快递公司编码 |
