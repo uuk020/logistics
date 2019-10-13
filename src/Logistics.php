@@ -1,18 +1,28 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
+
+/*
+ * This file is part of the uuk020/logistics.
+ *
+ * (c) WytheHuang<wythe.huangw@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Wythe\Logistics;
 
 use Wythe\Logistics\Exceptions\InvalidArgumentException;
 use Wythe\Logistics\Exceptions\NoQueryAvailableException;
 
 /**
- * 抓取物流信息
- * @package Wythe\Logistics
+ * 抓取物流信息.
  */
 class Logistics
 {
     /**
-     * 渠道接口总数
+     * 渠道接口总数.
      *
      * @var int
      */
@@ -26,7 +36,7 @@ class Logistics
     const SUCCESS = 'success';
 
     /**
-     * 失败
+     * 失败.
      *
      * @string
      */
@@ -40,7 +50,7 @@ class Logistics
     protected $factory;
 
     /**
-     * 构造函数
+     * 构造函数.
      */
     public function __construct()
     {
@@ -48,12 +58,14 @@ class Logistics
     }
 
     /**
-     * 通过接口获取物流信息
+     * 通过接口获取物流信息.
      *
      * @param string $code
      * @param array  $channels
      * @param string $company
+     *
      * @return array
+     *
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
      */
@@ -69,7 +81,7 @@ class Logistics
         foreach ($channels as $channel) {
             try {
                 $request = $this->factory->createChannel($channel)->request($code, $company);
-                if ($request['status'] === 1) {
+                if (1 === $request['status']) {
                     $results[$channel] = [
                         'channel' => $channel,
                         'status' => self::SUCCESS,
@@ -91,20 +103,23 @@ class Logistics
             }
         }
         $collectionOfException = array_column($results, 'exception');
-        if (count($collectionOfException) === self::CHANNEL_NUMBER) {
+        if (self::CHANNEL_NUMBER === count($collectionOfException)) {
             throw new NoQueryAvailableException('sorry! no channel class available');
         }
+
         return $results;
     }
 
     /**
-     * 通过代理IP获取物流信息
+     * 通过代理IP获取物流信息.
      *
      * @param array  $proxy
      * @param string $code
      * @param array  $channels
      * @param string $company
+     *
      * @return array
+     *
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
      */
@@ -120,7 +135,7 @@ class Logistics
         foreach ($channels as $channel) {
             try {
                 $request = $this->factory->createChannel($channel)->request($code, $company);
-                if ($request['status'] === 1) {
+                if (1 === $request['status']) {
                     $results[$channel] = [
                         'channel' => $channel,
                         'status' => self::SUCCESS,
@@ -142,9 +157,10 @@ class Logistics
             }
         }
         $collectionOfException = array_column($results, 'exception');
-        if (count($collectionOfException) === self::CHANNEL_NUMBER) {
+        if (self::CHANNEL_NUMBER === count($collectionOfException)) {
             throw new NoQueryAvailableException('sorry! no channel class available');
         }
+
         return $results;
     }
 }

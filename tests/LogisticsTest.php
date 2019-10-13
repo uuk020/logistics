@@ -1,24 +1,25 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: WytheHuang
- * Date: 2018/12/25
- * Time: 23:07
+
+/*
+ * This file is part of the uuk020/logistics.
+ *
+ * (c) WytheHuang<wythe.huangw@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 namespace Wythe\Logistics\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Wythe\Logistics\Exceptions\InvalidArgumentException;
-use Wythe\Logistics\Exceptions\NoQueryAvailableException;
-use Wythe\Logistics\Factory;
 use Wythe\Logistics\Logistics;
-use Wythe\Logistics\SupportLogistics;
 
 class LogisticsTest extends TestCase
 {
     /**
-     * 测试不传参数
+     * 测试不传参数.
+     *
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
      */
@@ -31,7 +32,7 @@ class LogisticsTest extends TestCase
     }
 
     /**
-     * 测试传不存在渠道
+     * 测试传不存在渠道.
      *
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
@@ -42,8 +43,8 @@ class LogisticsTest extends TestCase
             'kuaidBird' => [
                 'channel' => 'kuaidiBird',
                 'status' => 'failure',
-                'exception' => 'Wythe\Logistics\Channel\kuaidBirdChannel" not exists.'
-            ]
+                'exception' => 'Wythe\Logistics\Channel\kuaidBirdChannel" not exists.',
+            ],
         ];
         $logistics = \Mockery::mock(Logistics::class);
         $logistics->shouldReceive('query')->andReturn($response);
@@ -51,7 +52,7 @@ class LogisticsTest extends TestCase
     }
 
     /**
-     * 测试快递100渠道
+     * 测试快递100渠道.
      *
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
@@ -65,17 +66,17 @@ class LogisticsTest extends TestCase
                 'result' => [
                     [
                         'status' => 200,
-                        'message'  => 'OK',
+                        'message' => 'OK',
                         'error_code' => 0,
                         'data' => [
                             ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
                             ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
-                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心'],
                         ],
                         'logistics_company' => '申通快递',
-                        'logistics_bill_no' => '12312211'
-                    ]
-                ]
+                        'logistics_bill_no' => '12312211',
+                    ],
+                ],
             ],
         ];
         $logistics = \Mockery::mock(Logistics::class);
@@ -84,7 +85,7 @@ class LogisticsTest extends TestCase
     }
 
     /**
-     * 测试爱查快递渠道
+     * 测试爱查快递渠道.
      *
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
@@ -98,18 +99,18 @@ class LogisticsTest extends TestCase
                 'result' => [
                     [
                         'status' => 200,
-                        'message'  => 'OK',
+                        'message' => 'OK',
                         'error_code' => 0,
                         'data' => [
                             ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
                             ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
-                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心'],
                         ],
                         'logistics_company' => '申通快递',
-                        'logistics_bill_no' => '12312211'
-                    ]
-               ]
-            ]
+                        'logistics_bill_no' => '12312211',
+                    ],
+               ],
+            ],
         ];
         $logistics = \Mockery::mock(Logistics::class);
         $logistics->shouldReceive('query')->andReturn($response);
@@ -117,7 +118,7 @@ class LogisticsTest extends TestCase
     }
 
     /**
-     * 测试极速数据
+     * 测试极速数据.
      *
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
@@ -131,18 +132,18 @@ class LogisticsTest extends TestCase
                 'result' => [
                     [
                         'status' => 200,
-                        'message'  => 'OK',
+                        'message' => 'OK',
                         'error_code' => 0,
                         'data' => [
                             ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
                             ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
-                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心'],
                         ],
                         'logistics_company' => '申通快递',
-                        'logistics_bill_no' => '12312211'
-                    ]
-                ]
-            ]
+                        'logistics_bill_no' => '12312211',
+                    ],
+                ],
+            ],
         ];
         $logistics = \Mockery::mock(Logistics::class);
         $logistics->shouldReceive('query')->andReturn($response);
@@ -150,7 +151,7 @@ class LogisticsTest extends TestCase
     }
 
     /**
-     * 测试聚合数据
+     * 测试聚合数据.
      *
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
@@ -164,18 +165,18 @@ class LogisticsTest extends TestCase
                 'result' => [
                     [
                         'status' => 200,
-                        'message'  => 'OK',
+                        'message' => 'OK',
                         'error_code' => 0,
                         'data' => [
                             ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
                             ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
-                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心'],
                         ],
                         'logistics_company' => '申通快递',
-                        'logistics_bill_no' => '12312211'
-                    ]
-                ]
-            ]
+                        'logistics_bill_no' => '12312211',
+                    ],
+                ],
+            ],
         ];
         $logistics = \Mockery::mock(Logistics::class);
         $logistics->shouldReceive('query')->andReturn($response);
@@ -183,7 +184,7 @@ class LogisticsTest extends TestCase
     }
 
     /**
-     * 测试数据智汇
+     * 测试数据智汇.
      *
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
@@ -197,18 +198,18 @@ class LogisticsTest extends TestCase
                 'result' => [
                     [
                         'status' => 200,
-                        'message'  => 'OK',
+                        'message' => 'OK',
                         'error_code' => 0,
                         'data' => [
                             ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
                             ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
-                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心'],
                         ],
                         'logistics_company' => '申通快递',
-                        'logistics_bill_no' => '12312211'
-                    ]
-                ]
-            ]
+                        'logistics_bill_no' => '12312211',
+                    ],
+                ],
+            ],
         ];
         $logistics = \Mockery::mock(Logistics::class);
         $logistics->shouldReceive('query')->andReturn($response);
@@ -230,27 +231,26 @@ class LogisticsTest extends TestCase
                 'result' => [
                     [
                         'status' => 200,
-                        'message'  => 'OK',
+                        'message' => 'OK',
                         'error_code' => 0,
                         'data' => [
                             ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
                             ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
-                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心'],
                         ],
                         'logistics_company' => '申通快递',
-                        'logistics_bill_no' => '12312211'
-                    ]
-                ]
-            ]
+                        'logistics_bill_no' => '12312211',
+                    ],
+                ],
+            ],
         ];
         $logistics = \Mockery::mock(Logistics::class);
         $logistics->shouldReceive('query')->andReturn($response);
         $this->assertSame($response, $logistics->query('12312211', 'juHe', '申通'));
     }
 
-
     /**
-     * 测试全部渠道
+     * 测试全部渠道.
      *
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
@@ -264,17 +264,17 @@ class LogisticsTest extends TestCase
                 'result' => [
                     [
                         'status' => 200,
-                        'message'  => 'OK',
+                        'message' => 'OK',
                         'error_code' => 0,
                         'data' => [
                             ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
                             ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
-                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心'],
                         ],
                         'logistics_company' => '申通快递',
-                        'logistics_bill_no' => '12312211'
-                    ]
-                ]
+                        'logistics_bill_no' => '12312211',
+                    ],
+                ],
             ],
             'kuaiDiBird' => [
                 'channel' => 'kuaiDiBird',
@@ -282,17 +282,17 @@ class LogisticsTest extends TestCase
                 'result' => [
                     [
                         'status' => 200,
-                        'message'  => 'OK',
+                        'message' => 'OK',
                         'error_code' => 0,
                         'data' => [
                             ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
                             ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
-                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心'],
                         ],
                         'logistics_company' => '申通快递',
-                        'logistics_bill_no' => '12312211'
-                    ]
-                ]
+                        'logistics_bill_no' => '12312211',
+                    ],
+                ],
             ],
             'juHe' => [
                 'channel' => 'juHe',
@@ -300,17 +300,17 @@ class LogisticsTest extends TestCase
                 'result' => [
                     [
                         'status' => 200,
-                        'message'  => 'OK',
+                        'message' => 'OK',
                         'error_code' => 0,
                         'data' => [
                             ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
                             ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
-                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心'],
                         ],
                         'logistics_company' => '申通快递',
-                        'logistics_bill_no' => '12312211'
-                    ]
-                ]
+                        'logistics_bill_no' => '12312211',
+                    ],
+                ],
             ],
             'jiSu' => [
                 'channel' => 'jiSu',
@@ -318,17 +318,17 @@ class LogisticsTest extends TestCase
                 'result' => [
                     [
                         'status' => 200,
-                        'message'  => 'OK',
+                        'message' => 'OK',
                         'error_code' => 0,
                         'data' => [
                             ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
                             ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
-                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心'],
                         ],
                         'logistics_company' => '申通快递',
-                        'logistics_bill_no' => '12312211'
-                    ]
-                ]
+                        'logistics_bill_no' => '12312211',
+                    ],
+                ],
             ],
             'shuJuZhiHui' => [
                 'channel' => 'shuJuZhiHui',
@@ -336,17 +336,17 @@ class LogisticsTest extends TestCase
                 'result' => [
                     [
                         'status' => 200,
-                        'message'  => 'OK',
+                        'message' => 'OK',
                         'error_code' => 0,
                         'data' => [
                             ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
                             ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
-                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心'],
                         ],
                         'logistics_company' => '申通快递',
-                        'logistics_bill_no' => '12312211'
-                    ]
-                ]
+                        'logistics_bill_no' => '12312211',
+                    ],
+                ],
             ],
             'ickd' => [
                 'channel' => 'ickd',
@@ -354,24 +354,22 @@ class LogisticsTest extends TestCase
                 'result' => [
                     [
                         'status' => 200,
-                        'message'  => 'OK',
+                        'message' => 'OK',
                         'error_code' => 0,
                         'data' => [
                             ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
                             ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
-                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心']
+                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心'],
                         ],
                         'logistics_company' => '申通快递',
-                        'logistics_bill_no' => '12312211'
-                    ]
-                ]
+                        'logistics_bill_no' => '12312211',
+                    ],
+                ],
             ],
-
         ];
         $logistics = \Mockery::mock(Logistics::class);
         $logistics->shouldReceive('query')->andReturn($response);
         $this->assertSame($response, $logistics->query('12312211', ['kuaiDi100', 'kuaiDiBird', 'juHe', 'jiShu',
-            'shuJuZhiHui', 'ickd'], '申通'));
+            'shuJuZhiHui', 'ickd', ], '申通'));
     }
-
 }

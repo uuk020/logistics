@@ -3,19 +3,33 @@
  * Created by PhpStorm.
  * User: WytheHuang
  * Date: 2019/1/9
- * Time: 22:09
+ * Time: 22:09.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
+
+/*
+ * This file is part of the uuk020/logistics.
+ *
+ * (c) WytheHuang<wythe.huangw@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Wythe\Logistics\Channel;
+
 use Wythe\Logistics\Exceptions\HttpException;
+
 class IckdChannel extends Channel
 {
     protected $option = ['header' => ['referer: https://biz.trace.ickd.cn']];
+
     public function __construct()
     {
         $this->url = 'https://biz.trace.ickd.cn/auto/';
     }
+
     /**
      * 生成随机码
      *
@@ -25,18 +39,22 @@ class IckdChannel extends Channel
     {
         $letterOfAlphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
         $code = '';
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5; ++$i) {
             $index = mt_rand(0, strlen($letterOfAlphabet) - 1);
             $code .= $letterOfAlphabet[$index];
         }
+
         return $code;
     }
+
     /**
-     * 调用爱查快递查询快递链接
+     * 调用爱查快递查询快递链接.
      *
      * @param string $code
      * @param string $company
+     *
      * @return array
+     *
      * @throws \Wythe\Logistics\Exceptions\HttpException
      */
     public function request(string $code, string $company = ''): array
@@ -49,18 +67,20 @@ class IckdChannel extends Channel
                 'tk' => $this->randCode(),
                 'tm' => time() - 1,
                 'callback' => '_jqjsp',
-                '_'.time()
+                '_'.time(),
             ];
             $response = $this->get($this->url.$code, $urlParams, $this->option);
             $this->toArray($response);
             $this->format();
+
             return $this->response;
         } catch (\Exception $exception) {
             throw new HttpException($exception->getMessage());
         }
     }
+
     /**
-     * 转为数组
+     * 转为数组.
      *
      * @param array|string $response
      */
@@ -70,12 +90,12 @@ class IckdChannel extends Channel
         if (preg_match($pattern, $response, $match)) {
             $response = \json_decode($match[2], true);
             $this->response = [
-                'status'  => $response['status'],
+                'status' => $response['status'],
                 'message' => $response['message'],
                 'error_code' => $response['errCode'] ?? '',
                 'data' => $response['data'] ?? '',
                 'logistics_company' => $response['expTextName'] ?? '',
-                'logistics_bill_no' => $response['mailNo']
+                'logistics_bill_no' => $response['mailNo'],
             ];
         } else {
             $this->response = [
@@ -83,12 +103,13 @@ class IckdChannel extends Channel
                 'message' => '查询不到数据',
                 'error_code' => -1,
                 'data' => '',
-                'logistics_company' => ''
+                'logistics_company' => '',
             ];
         }
     }
+
     /**
-     * 统一物流信息
+     * 统一物流信息.
      *
      * @return mixed|void
      */

@@ -3,9 +3,19 @@
  * Created by PhpStorm.
  * User: WytheHuang
  * Date: 2019/6/23
- * Time: 0:12
+ * Time: 0:12.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
+
+/*
+ * This file is part of the uuk020/logistics.
+ *
+ * (c) WytheHuang<wythe.huangw@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Wythe\Logistics;
 
 use Wythe\Logistics\Traits\HttpRequest;
@@ -13,9 +23,10 @@ use Wythe\Logistics\Traits\HttpRequest;
 class SupportLogistics
 {
     use HttpRequest;
+
     private $companyList = [
-        '顺丰' => ['juhe' => 'sf', 'kuaidi100' => 'shunfeng', 'kuaidibird' => 'SF', ],
-        '申通' => ['juhe' => 'sto', 'kuaidi100' => 'shentong', 'kuaidibird' => 'STO',],
+        '顺丰' => ['juhe' => 'sf', 'kuaidi100' => 'shunfeng', 'kuaidibird' => 'SF'],
+        '申通' => ['juhe' => 'sto', 'kuaidi100' => 'shentong', 'kuaidibird' => 'STO'],
         '中通' => ['juhe' => 'zto', 'kuaidi100' => 'zhongtong', 'kuaidibird' => 'ZTO'],
         '圆通' => ['juhe' => 'yt', 'kuaidi100' => 'yuantong', 'kuaidibird' => 'YTO'],
         '韵达' => ['juhe' => 'yd', 'kuaidi100' => 'yunda', 'kuaidibird' => 'YD'],
@@ -73,7 +84,9 @@ class SupportLogistics
      * @param string $channel
      * @param string $code
      * @param string $companyName
+     *
      * @return string
+     *
      * @throws \Wythe\Logistics\Exceptions\HttpException
      */
     public function getCode(string $channel, string $code, string $companyName = ''): string
@@ -94,12 +107,13 @@ class SupportLogistics
             } else {
                 if ($companyName) {
                     $pattern = "/($name)(\w+)/i";
-                    if (\preg_match($pattern, $companyName) === 1) {
+                    if (1 === \preg_match($pattern, $companyName)) {
                         $companyCode = $this->companyList[$name][$channelName];
                     }
                 }
             }
         }
+
         return $companyCode;
     }
 }
