@@ -7,7 +7,6 @@
 [![Total Downloads](https://poser.pugx.org/wythe/logistics/downloads)](https://packagist.org/packages/wythe/logistics)
 [![Latest Unstable Version](https://poser.pugx.org/wythe/logistics/v/unstable)](https://packagist.org/packages/wythe/logistics)
 [![License](https://poser.pugx.org/wythe/logistics/license)](https://packagist.org/packages/wythe/logistics)
-
 ### 支持查询接口平台
 
 | 平台 | 次数 | 是否需要快递公司编码 |
@@ -18,6 +17,10 @@
 | [极速数据](https://www.jisuapi.com/api/express) | 1000次(免费) | N |
 | [数据智汇](http://www.shujuzhihui.cn/apiDetails?id=1867) | 100次(免费) | N |
 | [爱查快递](https://www.ickd.cn/api) | 无限次(抓取接口, 无法保证数据正确性) | N |
+
+### 配置须知
+* 配置文件: Config.php, 修改私有属性的$config数组.
+* 只有快递鸟申请后会有两个,一个是用户ID, 填入到app_secret,另外一个则是api_key, 填入app_key, 其他则把申请的key填入到app_key 
 
 ### 环境需求
 * PHP >= 7.0
