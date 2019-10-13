@@ -8,13 +8,10 @@
 [![Total Downloads](https://poser.pugx.org/wythe/logistics/downloads)](https://packagist.org/packages/wythe/logistics)
 [![Latest Unstable Version](https://poser.pugx.org/wythe/logistics/v/unstable)](https://packagist.org/packages/wythe/logistics)
 [![License](https://poser.pugx.org/wythe/logistics/license)](https://packagist.org/packages/wythe/logistics)
-<<<<<<< HEAD
-=======
 
 ### 重构版本
 1.0.0
 
->>>>>>> 193b5fb1d44f75fa6d967fcf102f0face717aa11
 ### 支持查询接口平台
 
 | 平台 | 次数 | 是否需要快递公司编码 |
