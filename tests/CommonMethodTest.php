@@ -12,7 +12,6 @@
 namespace Wythe\Logistics\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Wythe\Logistics\Channel\JiSuChannel;
 use Wythe\Logistics\Factory;
 use Wythe\Logistics\SupportLogistics;
 

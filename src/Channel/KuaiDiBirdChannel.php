@@ -54,8 +54,6 @@ class KuaiDiBirdChannel extends Channel
      * 拼接请求URL链接.
      *
      * @param string $requestData 请求的数据
-     *
-     * @return array
      */
     public function setRequestParam(string $requestData): array
     {
@@ -70,11 +68,6 @@ class KuaiDiBirdChannel extends Channel
 
     /**
      * 编码
-     *
-     * @param string $data
-     * @param string $appKey
-     *
-     * @return string
      */
     private function encrypt(string $data, string $appKey): string
     {
@@ -83,11 +76,6 @@ class KuaiDiBirdChannel extends Channel
 
     /**
      * 请求
-     *
-     * @param string $code
-     * @param string $company
-     *
-     * @return array
      *
      * @throws \Exception
      */

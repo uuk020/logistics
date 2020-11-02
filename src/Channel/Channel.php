@@ -53,8 +53,6 @@ abstract class Channel
     /**
      * 设置请求选项.
      *
-     * @param array $option
-     *
      * @return \Wythe\Logistics\Channel\Channel
      */
     public function setRequestOption(array $option): self
@@ -75,8 +73,6 @@ abstract class Channel
 
     /**
      * 获取实例化的类名称.
-     *
-     * @return string
      */
     protected function getClassName(): string
     {
@@ -87,8 +83,6 @@ abstract class Channel
 
     /**
      * 获取配置.
-     *
-     * @return array
      */
     protected function getChannelConfig(): array
     {
@@ -97,11 +91,6 @@ abstract class Channel
 
     /**
      * 调用查询接口.
-     *
-     * @param string $code
-     * @param string $company
-     *
-     * @return array
      */
     abstract public function request(string $code, string $company = ''): array;
 

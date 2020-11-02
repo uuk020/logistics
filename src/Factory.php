@@ -31,8 +31,6 @@ class Factory
     /**
      * 获取默认查询类名称.
      *
-     * @return string
-     *
      * @throws \Wythe\Logistics\Exceptions\Exception
      */
     public function getDefault(): string
@@ -56,8 +54,6 @@ class Factory
 
     /**
      * 数组元素存储查询对象
-     *
-     * @param string $name
      *
      * @return mixed
      *
@@ -83,10 +79,6 @@ class Factory
 
     /**
      * 格式化类的名称.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     protected function formatClassName(string $name): string
     {
