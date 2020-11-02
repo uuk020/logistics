@@ -35,11 +35,6 @@ class JuHeChannel extends Channel
     /**
      * 构造请求参数.
      *
-     * @param string $code
-     * @param string $company
-     *
-     * @return array
-     *
      * @throws \Wythe\Logistics\Exceptions\HttpException
      */
     private function setRequestParam(string $code, string $company): array
@@ -52,11 +47,6 @@ class JuHeChannel extends Channel
 
     /**
      * 请求
-     *
-     * @param string $code
-     * @param string $company
-     *
-     * @return array
      *
      * @throws \Exception
      */

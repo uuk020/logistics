@@ -51,8 +51,6 @@ class Logistics
 
     /**
      * 构造函数.
-     *
-     * @param array $config
      */
     public function __construct(array $config)
     {
@@ -67,19 +65,16 @@ class Logistics
             'shujuzhihui' => 'shuJuZhiHui',
             'jisu' => 'jiSu',
             'kuaidibird' => 'kuaiDiBird',
-            'kuaidi100' => 'kuaiDi100'
+            'kuaidi100' => 'kuaiDi100',
         ];
+
         return $channels[$channelName];
     }
 
     /**
      * 通过接口获取物流信息.
      *
-     * @param string $code
-     * @param array  $channels
-     * @param string $company
-     *
-     * @return array
+     * @param array $channels
      *
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
@@ -129,12 +124,7 @@ class Logistics
     /**
      * 通过代理IP获取物流信息.
      *
-     * @param array  $proxy
-     * @param string $code
-     * @param array  $channels
-     * @param string $company
-     *
-     * @return array
+     * @param array $channels
      *
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
