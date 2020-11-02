@@ -92,10 +92,7 @@ abstract class Channel
      */
     protected function getChannelConfig(): array
     {
-        $key = $this->getClassName();
-        $config = (new Config())->getConfig(strtolower($key));
-
-        return $config;
+        return (new Config())->getConfig(strtolower($this->getClassName()));
     }
 
     /**

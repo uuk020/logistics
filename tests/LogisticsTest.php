@@ -12,11 +12,35 @@
 namespace Wythe\Logistics\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Wythe\Logistics\Exceptions\ConfigNotFoundException;
+use Wythe\Logistics\Exceptions\ConfigValidateException;
 use Wythe\Logistics\Exceptions\InvalidArgumentException;
 use Wythe\Logistics\Logistics;
 
 class LogisticsTest extends TestCase
 {
+
+    public function testNotExistConfig()
+    {
+        $config = [
+            'ickd' => ['app_key' => 'app_key', 'vip' => false],
+        ];
+        $this->expectException(ConfigNotFoundException::class);
+        $this->expectExceptionMessage('没找到相对应配置规则');
+        $l = new Logistics($config);
+    }
+
+    public function testMistakeConfig()
+    {
+        $config = [
+            'juhe' => ['app_key1' => 'app_key', 'vip' => false]
+        ];
+        $this->expectException(ConfigValidateException::class);
+        $this->expectExceptionMessage('规则验证失败');
+        $l = new Logistics($config);
+        $l->query('12312312', 'juhe');
+    }
+
     /**
      * 测试不传参数.
      *
@@ -25,30 +49,13 @@ class LogisticsTest extends TestCase
      */
     public function testChannelWithInvalidParams()
     {
-        $l = new Logistics();
+        $config = [
+            'juhe' => ['app_key' => 'app_key', 'vip' => false],
+        ];
+        $l = new Logistics($config);
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('code arguments cannot empty.');
-        $l->query('', '');
-    }
-
-    /**
-     * 测试传不存在渠道.
-     *
-     * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
-     * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
-     */
-    public function testChannelWithChannelClass()
-    {
-        $response = [
-            'kuaidBird' => [
-                'channel' => 'kuaidiBird',
-                'status' => 'failure',
-                'exception' => 'Wythe\Logistics\Channel\kuaidBirdChannel" not exists.',
-            ],
-        ];
-        $logistics = \Mockery::mock(Logistics::class);
-        $logistics->shouldReceive('query')->andReturn($response);
-        $this->assertSame($response, $logistics->query('12312211', 'kuaidBird'));
+        $l->query('', 'juhe');
     }
 
     /**
@@ -59,6 +66,9 @@ class LogisticsTest extends TestCase
      */
     public function testChannelByKuaidi100()
     {
+        $config = [
+            'kuaidi100' => ['app_key' => 'app_key', 'app_secret' => 'app_secret'],
+        ];
         $kuaidiResponse = [
             'kuaidi100' => [
                 'channel' => 'kuaiDi100',
@@ -79,42 +89,9 @@ class LogisticsTest extends TestCase
                 ],
             ],
         ];
-        $logistics = \Mockery::mock(Logistics::class);
+        $logistics = \Mockery::mock(Logistics::class, [$config]);
         $logistics->shouldReceive('query')->andReturn($kuaidiResponse);
         $this->assertSame($kuaidiResponse, $logistics->query('12312211', 'kuaidi100', '申通'));
-    }
-
-    /**
-     * 测试爱查快递渠道.
-     *
-     * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
-     * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
-     */
-    public function testChannelByIckd()
-    {
-        $response = [
-            'ickd' => [
-                'channel' => 'ickd',
-                'status' => 'success',
-                'result' => [
-                    [
-                        'status' => 200,
-                        'message' => 'OK',
-                        'error_code' => 0,
-                        'data' => [
-                            ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
-                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
-                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心'],
-                        ],
-                        'logistics_company' => '申通快递',
-                        'logistics_bill_no' => '12312211',
-                    ],
-               ],
-            ],
-        ];
-        $logistics = \Mockery::mock(Logistics::class);
-        $logistics->shouldReceive('query')->andReturn($response);
-        $this->assertSame($response, $logistics->query('12312211', 'ickd'));
     }
 
     /**
@@ -125,9 +102,12 @@ class LogisticsTest extends TestCase
      */
     public function testChannelByJiSu()
     {
+        $config = [
+            'jisu' => ['app_key' => 'app_key', 'vip' => false],
+        ];
         $response = [
-            'jiSu' => [
-                'channel' => 'jiSu',
+            'jisu' => [
+                'channel' => 'jisu',
                 'status' => 'success',
                 'result' => [
                     [
@@ -145,9 +125,9 @@ class LogisticsTest extends TestCase
                 ],
             ],
         ];
-        $logistics = \Mockery::mock(Logistics::class);
+        $logistics = \Mockery::mock(Logistics::class, [$config]);
         $logistics->shouldReceive('query')->andReturn($response);
-        $this->assertSame($response, $logistics->query('12312211', 'jiSu'));
+        $this->assertSame($response, $logistics->query('12312211', 'jisu'));
     }
 
     /**
@@ -158,9 +138,12 @@ class LogisticsTest extends TestCase
      */
     public function testChannelByJuHe()
     {
+        $config = [
+            'juhe' => ['app_key' => 'app_key', 'vip' => false],
+        ];
         $response = [
-            'juHe' => [
-                'channel' => 'juHe',
+            'juhe' => [
+                'channel' => 'juhe',
                 'status' => 'success',
                 'result' => [
                     [
@@ -178,9 +161,9 @@ class LogisticsTest extends TestCase
                 ],
             ],
         ];
-        $logistics = \Mockery::mock(Logistics::class);
+        $logistics = \Mockery::mock(Logistics::class, [$config]);
         $logistics->shouldReceive('query')->andReturn($response);
-        $this->assertSame($response, $logistics->query('12312211', 'juHe', '申通'));
+        $this->assertSame($response, $logistics->query('12312211', 'juhe', '申通'));
     }
 
     /**
@@ -191,9 +174,12 @@ class LogisticsTest extends TestCase
      */
     public function testChannelByShuJu()
     {
+        $config = [
+            'shujuzhihui' => ['app_key' => 'app_key', 'vip' => false]
+        ];
         $response = [
-            'shuJuZhiHui' => [
-                'channel' => 'shuJuZhiHui',
+            'shujuzhihui' => [
+                'channel' => 'shujuzhihui',
                 'status' => 'success',
                 'result' => [
                     [
@@ -211,9 +197,9 @@ class LogisticsTest extends TestCase
                 ],
             ],
         ];
-        $logistics = \Mockery::mock(Logistics::class);
+        $logistics = \Mockery::mock(Logistics::class, [$config]);
         $logistics->shouldReceive('query')->andReturn($response);
-        $this->assertSame($response, $logistics->query('12312211', 'shuJuZhiHui', '申通'));
+        $this->assertSame($response, $logistics->query('12312211', 'shujuzhihui', '申通'));
     }
 
     /**
@@ -224,9 +210,12 @@ class LogisticsTest extends TestCase
      */
     public function testChannelByKuaiDiBird()
     {
+        $config = [
+            'kuaidibird' => ['app_key' => 'app_key', 'app_secret' => 'app_secret', 'vip' => false],
+        ];
         $response = [
-            'kuaiDiBird' => [
-                'channel' => 'kuaiDiBird',
+            'kuaidibird' => [
+                'channel' => 'kuaidibird',
                 'status' => 'success',
                 'result' => [
                     [
@@ -244,9 +233,9 @@ class LogisticsTest extends TestCase
                 ],
             ],
         ];
-        $logistics = \Mockery::mock(Logistics::class);
+        $logistics = \Mockery::mock(Logistics::class, [$config]);
         $logistics->shouldReceive('query')->andReturn($response);
-        $this->assertSame($response, $logistics->query('12312211', 'juHe', '申通'));
+        $this->assertSame($response, $logistics->query('12312211', 'kuaidibird', '申通'));
     }
 
     /**
@@ -257,9 +246,16 @@ class LogisticsTest extends TestCase
      */
     public function testChannelByBoth()
     {
+        $config = [
+            'kuaidi100' => ['app_key' => 'app_key', 'app_secret' => 'app_secret'],
+            'kuaidibird' => ['app_key' => 'app_key', 'app_secret' => 'app_secret', 'vip' => false],
+            'juhe' => ['app_key' => 'app_key', 'vip' => false],
+            'jisu' => ['app_key' => 'app_key', 'vip' => false],
+            'shujuzhihui' => ['app_key' => 'app_key', 'vip' => false]
+        ];
         $response = [
             'kuaidi100' => [
-                'channel' => 'kuaiDi100',
+                'channel' => 'kuaidi100',
                 'status' => 'success',
                 'result' => [
                     [
@@ -276,8 +272,8 @@ class LogisticsTest extends TestCase
                     ],
                 ],
             ],
-            'kuaiDiBird' => [
-                'channel' => 'kuaiDiBird',
+            'kuaidibird' => [
+                'channel' => 'kuaidibird',
                 'status' => 'success',
                 'result' => [
                     [
@@ -294,8 +290,8 @@ class LogisticsTest extends TestCase
                     ],
                 ],
             ],
-            'juHe' => [
-                'channel' => 'juHe',
+            'juhe' => [
+                'channel' => 'juhe',
                 'status' => 'success',
                 'result' => [
                     [
@@ -312,8 +308,8 @@ class LogisticsTest extends TestCase
                     ],
                 ],
             ],
-            'jiSu' => [
-                'channel' => 'jiSu',
+            'jisu' => [
+                'channel' => 'jisu',
                 'status' => 'success',
                 'result' => [
                     [
@@ -330,26 +326,8 @@ class LogisticsTest extends TestCase
                     ],
                 ],
             ],
-            'shuJuZhiHui' => [
-                'channel' => 'shuJuZhiHui',
-                'status' => 'success',
-                'result' => [
-                    [
-                        'status' => 200,
-                        'message' => 'OK',
-                        'error_code' => 0,
-                        'data' => [
-                            ['time' => '2019-06-10 00:00:00', 'description' => '仓库-已签收'],
-                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX服务点'],
-                            ['time' => '2019-06-10 00:00:00', 'description' => '广东XX转运中心'],
-                        ],
-                        'logistics_company' => '申通快递',
-                        'logistics_bill_no' => '12312211',
-                    ],
-                ],
-            ],
-            'ickd' => [
-                'channel' => 'ickd',
+            'shujuzhihui' => [
+                'channel' => 'shujuzhihui',
                 'status' => 'success',
                 'result' => [
                     [
@@ -367,9 +345,8 @@ class LogisticsTest extends TestCase
                 ],
             ],
         ];
-        $logistics = \Mockery::mock(Logistics::class);
+        $logistics = \Mockery::mock(Logistics::class, [$config]);
         $logistics->shouldReceive('query')->andReturn($response);
-        $this->assertSame($response, $logistics->query('12312211', ['kuaiDi100', 'kuaiDiBird', 'juHe', 'jiShu',
-            'shuJuZhiHui', 'ickd', ], '申通'));
+        $this->assertSame($response, $logistics->query('12312211', array_keys($config),'申通'));
     }
 }

@@ -9,8 +9,6 @@
 [![Latest Unstable Version](https://poser.pugx.org/wythe/logistics/v/unstable)](https://packagist.org/packages/wythe/logistics)
 [![License](https://poser.pugx.org/wythe/logistics/license)](https://packagist.org/packages/wythe/logistics)
 
-### 重构版本
-1.0.0
 
 ### 支持查询接口平台
 
@@ -21,10 +19,8 @@
 | [聚合数据](https://www.juhe.cn/docs/api/id/43) | 100次(首次申请) | Y |
 | [极速数据](https://www.jisuapi.com/api/express) | 1000次(免费) | N |
 | [数据智汇](http://www.shujuzhihui.cn/apiDetails?id=1867) | 100次(免费) | N |
-| [爱查快递](https://www.ickd.cn/api) | 无限次(抓取接口, 无法保证数据正确性) | N |
 
 ### 配置须知
-* 配置文件: Config.php, 修改私有属性的$config数组.
 * 只有快递鸟申请后会有两个,一个是用户ID, 填入到app_secret,另外一个则是api_key, 填入app_key, 其他则把申请的key填入到app_key 
 
 ### 环境需求
@@ -38,8 +34,16 @@ $ composer require wythe/logistics -vvv
 
 ### 使用
 ```php
-use Wythe\Logistics\Logistics
-$logistics = new Logistics()
+use Wythe\Logistics\Logistics;
+$config = [
+    'juhe' => ['app_key' => 'app_key', 'vip' => false],
+    'shujuzhihui' => ['app_key' => 'app_key', 'vip' => false],
+    'jisu' => ['app_key' => 'app_key', 'vip' => false],
+    'kuaidibird' => ['app_key' => 'app_key', 'app_secret' =>  'app_secret', 'vip' =>
+            false],
+    'kuaidi100' => ['app_key' => '']
+];
+$logistics = new Logistics($config);
 ```
 
 ### 参数说明
@@ -56,7 +60,17 @@ array queryByProxy(array $proxy, string $code, $channels = ['kuaidi100'], string
 
 ### 快递 100 接口获取物流信息 所有接口返回格式是统一
 ```php
-$logistics->query('12313131231', ''); // 第二参数不设,则默认快递鸟接口
+use Wythe\Logistics\Logistics;
+$config = [
+    'juhe' => ['app_key' => 'app_key', 'vip' => false],
+    'shujuzhihui' => ['app_key' => 'app_key', 'vip' => false],
+    'jisu' => ['app_key' => 'app_key', 'vip' => false],
+    'kuaidibird' => ['app_key' => 'app_key', 'app_secret' =>  'app_secret', 'vip' =>
+            false],
+    'kuaidi100' => ['app_key' => '']
+];
+$logistics = new Logistics($config);
+$logistics->query('12313131231', ''); // 第二参数选填,可以为字符串或数组, 默认快递鸟
 $logistics->query('12313131231', 'kuaidi100');
 $logistics->query('12313131231', ['kuaidi100']);
 ```
@@ -95,6 +109,16 @@ $logistics->query('12313131231', ['kuaidi100']);
 
 ### 多接口获取物流信息
 ```php
+use Wythe\Logistics\Logistics;
+$config = [
+    'juhe' => ['app_key' => 'app_key', 'vip' => false],
+    'shujuzhihui' => ['app_key' => 'app_key', 'vip' => false],
+    'jisu' => ['app_key' => 'app_key', 'vip' => false],
+    'kuaidibird' => ['app_key' => 'app_key', 'app_secret' =>  'app_secret', 'vip' =>
+            false],
+    'kuaidi100' => ['app_key' => '']
+];
+$logistics = new Logistics($config);
 $logistics->query('12313131231');
 $logistics->query('12313131231', ['kuaidi100', 'ickd']);
 ```

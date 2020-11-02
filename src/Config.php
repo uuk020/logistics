@@ -18,28 +18,76 @@ declare(strict_types=1);
 
 namespace Wythe\Logistics;
 
+use Wythe\Logistics\Exceptions\ConfigNotFoundException;
+use Wythe\Logistics\Exceptions\ConfigValidateException;
+
 /**
  * 配置类.
  */
 class Config
 {
-    private $config = [
-        'juhe' => ['app_key' => 'app_key', 'vip' => false], // 免费套餐 100 次
-        'jisu' => ['app_key' => 'app_key', 'app_secret' => 'app_secret', 'vip' => false], // 免费套餐 1000 次
-        'shujuzhihui' => ['app_key' => 'app_key', 'vip' => false], // 免费套餐 100 次
-        'kuaidi100' => ['app_key' => 'app_key', 'app_secret' => 'app_secret', 'vip' => false], // 免费套餐 100 次
-        'kuaidibird' => ['app_key' => 'app_key', 'app_secret' => 'app_secret', 'vip' => false], // 免费套餐 3000 次
+    /**
+     * 配置.
+     *
+     * @var array
+     */
+    protected static $config;
+
+    /**
+     * 配置验证规则.
+     *
+     * @var array
+     */
+    protected $validateRule = [
+        'juhe' => ['app_key', 'vip'],
+        'jisu' => ['app_key', 'vip'],
+        'shujuzhihui' => ['app_key', 'vip'],
+        'kuaidi100' => ['app_key', 'app_secret'],
+        'kuaidibird' => ['app_key', 'app_secret', 'vip'],
     ];
+
+    /**
+     * 验证规则.
+     *
+     * @param string $channel
+     * @throws ConfigNotFoundException
+     * @throws ConfigValidateException
+     */
+    protected function validate(string $channel)
+    {
+        if (!in_array($channel, array_keys($this->validateRule))) {
+            throw new ConfigNotFoundException('没找到相对应配置规则');
+        }
+        $keys = array_keys(static::$config[$channel]);
+        $intersect = array_intersect($this->validateRule[$channel], $keys);
+        if (count($intersect) !== count($this->validateRule[$channel])) {
+            throw new ConfigValidateException('规则验证失败');
+        }
+    }
+
+    /**
+     * 设置配置.
+     *
+     * @param array $params
+     * @throws ConfigNotFoundException
+     * @throws ConfigValidateException
+     */
+    public function setConfig(array $params)
+    {
+        static::$config = $params;
+        foreach (static::$config as $channel => $param) {
+            $this->validate($channel);
+        }
+    }
 
     /**
      * 获取配置.
      *
      * @param string $key
-     *
      * @return array
      */
     public function getConfig(string $key): array
     {
-        return $this->config[$key];
+        return static::$config[$key];
     }
 }

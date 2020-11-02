@@ -31,19 +31,6 @@ class CommonMethodTest extends TestCase
     }
 
     /**
-     * 测试获取类名称.
-     */
-    public function testClassName()
-    {
-        $jiSu = new JiSuChannel();
-        $closure = function () {
-            return $this->getClassName();
-        };
-        $bindTo = $closure->bindTo($jiSu, $jiSu);
-        $this->assertSame('JiSu', $bindTo());
-    }
-
-    /**
      * 测试获取快递公司编码
      *
      * @throws \Wythe\Logistics\Exceptions\HttpException

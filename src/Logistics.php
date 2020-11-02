@@ -51,10 +51,25 @@ class Logistics
 
     /**
      * 构造函数.
+     *
+     * @param array $config
      */
-    public function __construct()
+    public function __construct(array $config)
     {
+        (new Config())->setConfig($config);
         $this->factory = new Factory();
+    }
+
+    private function channelMap(string $channelName): string
+    {
+        $channels = [
+            'juhe' => 'juHe',
+            'shujuzhihui' => 'shuJuZhiHui',
+            'jisu' => 'jiSu',
+            'kuaidibird' => 'kuaiDiBird',
+            'kuaidi100' => 'kuaiDi100'
+        ];
+        return $channels[$channelName];
     }
 
     /**
@@ -69,7 +84,7 @@ class Logistics
      * @throws \Wythe\Logistics\Exceptions\InvalidArgumentException
      * @throws \Wythe\Logistics\Exceptions\NoQueryAvailableException
      */
-    public function query(string $code, $channels = ['kuaidiBird'], string $company = ''): array
+    public function query(string $code, $channels = ['kuaidibird'], string $company = ''): array
     {
         $results = [];
         if (empty($code)) {
@@ -78,25 +93,26 @@ class Logistics
         if (!empty($channels) && is_string($channels)) {
             $channels = explode(',', $channels);
         }
-        foreach ($channels as $channel) {
+        foreach ($channels as $channelName) {
+            $channel = $this->channelMap($channelName);
             try {
                 $request = $this->factory->createChannel($channel)->request($code, $company);
                 if (1 === $request['status']) {
-                    $results[$channel] = [
-                        'channel' => $channel,
+                    $results[$channelName] = [
+                        'channel' => $channelName,
                         'status' => self::SUCCESS,
                         'result' => $request,
                     ];
                 } else {
-                    $results[$channel] = [
-                        'channel' => $channel,
+                    $results[$channelName] = [
+                        'channel' => $channelName,
                         'status' => self::FAILURE,
                         'exception' => $request['message'],
                     ];
                 }
             } catch (\Exception $exception) {
-                $results[$channel] = [
-                    'channel' => $channel,
+                $results[$channelName] = [
+                    'channel' => $channelName,
                     'status' => self::FAILURE,
                     'exception' => $exception->getMessage(),
                 ];
