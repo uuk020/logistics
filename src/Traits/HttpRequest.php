@@ -26,7 +26,6 @@ trait HttpRequest
      * 设置cURL参数.
      *
      * @param resource $handle
-     * @param array    $option
      */
     private function setCurlCommonOption($handle, array $option = [])
     {
@@ -69,7 +68,6 @@ trait HttpRequest
      *
      * @param string       $url
      * @param string|array $params
-     * @param array        $option
      *
      * @return string
      *
@@ -94,7 +92,6 @@ trait HttpRequest
      *
      * @param string       $url
      * @param string|array $params
-     * @param array        $option
      *
      * @return bool|string
      *
@@ -116,8 +113,6 @@ trait HttpRequest
 
     /**
      * 设置useragent.
-     *
-     * @return string
      */
     private function setUseragent(): string
     {
@@ -146,12 +141,6 @@ trait HttpRequest
 
     /**
      * GET 多线程请求
-     *
-     * @param array $urls
-     * @param array $params
-     * @param array $option
-     *
-     * @return array
      */
     protected function getByQueue(array $urls = [], array $params = [], array $option = []): array
     {
@@ -195,12 +184,6 @@ trait HttpRequest
 
     /**
      * POST 多线程请求
-     *
-     * @param array $urls
-     * @param array $params
-     * @param array $option
-     *
-     * @return array
      */
     protected function postByQueue(array $urls = [], array $params = [], array $option = []): array
     {

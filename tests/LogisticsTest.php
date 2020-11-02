@@ -19,7 +19,6 @@ use Wythe\Logistics\Logistics;
 
 class LogisticsTest extends TestCase
 {
-
     public function testNotExistConfig()
     {
         $config = [
@@ -33,7 +32,7 @@ class LogisticsTest extends TestCase
     public function testMistakeConfig()
     {
         $config = [
-            'juhe' => ['app_key1' => 'app_key', 'vip' => false]
+            'juhe' => ['app_key1' => 'app_key', 'vip' => false],
         ];
         $this->expectException(ConfigValidateException::class);
         $this->expectExceptionMessage('规则验证失败');
@@ -175,7 +174,7 @@ class LogisticsTest extends TestCase
     public function testChannelByShuJu()
     {
         $config = [
-            'shujuzhihui' => ['app_key' => 'app_key', 'vip' => false]
+            'shujuzhihui' => ['app_key' => 'app_key', 'vip' => false],
         ];
         $response = [
             'shujuzhihui' => [
@@ -251,7 +250,7 @@ class LogisticsTest extends TestCase
             'kuaidibird' => ['app_key' => 'app_key', 'app_secret' => 'app_secret', 'vip' => false],
             'juhe' => ['app_key' => 'app_key', 'vip' => false],
             'jisu' => ['app_key' => 'app_key', 'vip' => false],
-            'shujuzhihui' => ['app_key' => 'app_key', 'vip' => false]
+            'shujuzhihui' => ['app_key' => 'app_key', 'vip' => false],
         ];
         $response = [
             'kuaidi100' => [
@@ -347,6 +346,6 @@ class LogisticsTest extends TestCase
         ];
         $logistics = \Mockery::mock(Logistics::class, [$config]);
         $logistics->shouldReceive('query')->andReturn($response);
-        $this->assertSame($response, $logistics->query('12312211', array_keys($config),'申通'));
+        $this->assertSame($response, $logistics->query('12312211', array_keys($config), '申通'));
     }
 }

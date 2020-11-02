@@ -49,7 +49,6 @@ class Config
     /**
      * 验证规则.
      *
-     * @param string $channel
      * @throws ConfigNotFoundException
      * @throws ConfigValidateException
      */
@@ -68,7 +67,6 @@ class Config
     /**
      * 设置配置.
      *
-     * @param array $params
      * @throws ConfigNotFoundException
      * @throws ConfigValidateException
      */
@@ -82,9 +80,6 @@ class Config
 
     /**
      * 获取配置.
-     *
-     * @param string $key
-     * @return array
      */
     public function getConfig(string $key): array
     {

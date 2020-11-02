@@ -38,11 +38,6 @@ class JiSuChannel extends Channel
     /**
      * 请求
      *
-     * @param string $code
-     * @param string $company
-     *
-     * @return array
-     *
      * @throws \Wythe\Logistics\Exceptions\HttpException
      */
     public function request(string $code, string $company = ''): array

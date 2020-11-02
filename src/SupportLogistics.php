@@ -81,12 +81,6 @@ class SupportLogistics
     /**
      * 获取物流公司编码
      *
-     * @param string $channel
-     * @param string $code
-     * @param string $companyName
-     *
-     * @return string
-     *
      * @throws \Wythe\Logistics\Exceptions\HttpException
      */
     public function getCode(string $channel, string $code, string $companyName = ''): string

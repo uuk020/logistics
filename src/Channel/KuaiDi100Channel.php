@@ -34,11 +34,6 @@ class KuaiDi100Channel extends Channel
     /**
      * 调用快递100接口.
      *
-     * @param string $code
-     * @param string $company
-     *
-     * @return array
-     *
      * @throws \Exception
      */
     public function request(string $code, string $company = ''): array
