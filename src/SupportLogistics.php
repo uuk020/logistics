@@ -97,12 +97,12 @@ class SupportLogistics
         }
         foreach ($this->companyList as $name => $item) {
             if (isset($kuaidi100CompanyCode) && $item['kuaidi100'] === $kuaidi100CompanyCode) {
-                $companyCode = $item[$channelName];
+                return $item[$channelName];
             } else {
                 if ($companyName) {
-                    $pattern = "/($name)(\w+)/i";
+                    $pattern = "/($name)(\W+)/i";
                     if (1 === \preg_match($pattern, $companyName)) {
-                        $companyCode = $this->companyList[$name][$channelName];
+                        return $this->companyList[$name][$channelName];
                     }
                 }
             }
