@@ -100,8 +100,7 @@ class SupportLogistics
                 return $item[$channelName];
             } else {
                 if ($companyName) {
-                    $pattern = "/($name)(\W+)/i";
-                    if (1 === \preg_match($pattern, $companyName)) {
+                    if (false !== strpos($companyName, $name)) {
                         return $this->companyList[$name][$channelName];
                     }
                 }
