@@ -75,7 +75,8 @@ class SupportLogistics
         '苏宁' => ['juhe' => 'suning', 'kuaidi100' => 'suning', 'kuaidibird' => 'SNWL'],
         '九曳' => ['juhe' => 'jiuye', 'kuaidi100' => 'jiuyescm', 'kuaidibird' => 'JIUYE'],
         '亚马逊' => ['juhe' => '', 'kuaidi100' => '', 'kuaidibird' => 'AMAZON'],
-        '环球速运' => ['juhe' => '', 'kuaidi100' => '', 'kuaibird' => 'HQSY'],
+        '环球速运' => ['juhe' => '', 'kuaidi100' => '', 'kuaidibird' => 'HQSY'],
+        '联昊通' => ['juhe' => '', 'kuaidi100' => 'lianhaowuliu', 'kuaidibird' => 'LHT'],
     ];
 
     /**
