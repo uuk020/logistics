@@ -162,7 +162,8 @@ trait HttpRequest
         }
         $active = null;
         do {
-            while (\CURLM_CALL_MULTI_PERFORM == ($mrc = \curl_multi_exec($mh, $active)));
+            while (\CURLM_CALL_MULTI_PERFORM == ($mrc = \curl_multi_exec($mh, $active))) {
+            }
             if (\CURLM_OK != $mrc) {
                 break;
             }
@@ -205,7 +206,8 @@ trait HttpRequest
         }
         $active = null;
         do {
-            while (\CURLM_CALL_MULTI_PERFORM == ($mrc = \curl_multi_exec($mh, $active)));
+            while (\CURLM_CALL_MULTI_PERFORM == ($mrc = \curl_multi_exec($mh, $active))) {
+            }
             if (\CURLM_OK != $mrc) {
                 break;
             }
