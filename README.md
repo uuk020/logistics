@@ -12,13 +12,13 @@
 
 ### 支持查询接口平台
 
-| 平台 | 次数 | 是否需要快递公司编码 |
-| :-----: | :----: | :----: |
-| [快递100](https://www.kuaidi100.com/openapi/applyapi.shtml) | 100单/天(免费) | Y |
-| [快递鸟](http://www.kdniao.com/api-all) | 3000单/天(免费) | Y |
-| [聚合数据](https://www.juhe.cn/docs/api/id/43) | 100次(首次申请) | Y |
-| [极速数据](https://www.jisuapi.com/api/express) | 1000次(免费) | N |
-| [数据智汇](http://www.shujuzhihui.cn/apiDetails?id=1867) | 100次(免费) | N |
+| 平台 | 次数 | 是否需要快递公司编码 | 免费版支持的快递公司 |
+| :-----: | :----: | :----: | :----: |
+| [快递100](https://www.kuaidi100.com/openapi/applyapi.shtml) | 100次(首次申请) | Y | |
+| [快递鸟](http://www.kdniao.com/api-all) | 500单/天(免费) | Y | 支持申通、圆通、百世、天天，其他快递公司可自行尝试，不支持顺丰 |
+| [聚合数据](https://www.juhe.cn/docs/api/id/43) | 100次(首次申请) | Y | |
+| [极速数据](https://www.jisuapi.com/api/express) | 1000次(免费) | N | |
+| [数据智汇](http://www.shujuzhihui.cn/apiDetails?id=1867) | 100次(免费) | N | |
 
 ### 配置须知
 * 只有快递鸟申请后会有两个,一个是用户ID, 填入到app_secret,另外一个则是api_key, 填入app_key, 其他则把申请的key填入到app_key 
