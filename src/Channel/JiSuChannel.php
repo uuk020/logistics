@@ -31,8 +31,7 @@ class JiSuChannel extends Channel
      */
     public function __construct()
     {
-        $config = $this->getChannelConfig();
-        $this->url = 'https://api.jisuapi.com/express/query?appkey='.$config['app_key'];
+        $this->url = 'https://api.jisuapi.com/express/query';
     }
 
     /**
@@ -43,7 +42,8 @@ class JiSuChannel extends Channel
     public function request(string $code, string $company = ''): array
     {
         try {
-            $params = ['type' => 'auto', 'number' => $code];
+            $config = $this->getChannelConfig();
+            $params = ['appkey' => $config['app_key'], 'type' => 'auto', 'number' => $code];
             $response = $this->get($this->url, $params);
             $this->toArray($response);
             $this->format();
