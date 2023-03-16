@@ -44,8 +44,6 @@ class Factory
 
     /**
      * 设置默认查询类名称.
-     *
-     * @param $name
      */
     public function setDefault($name)
     {

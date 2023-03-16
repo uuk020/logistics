@@ -46,10 +46,6 @@ trait HttpRequest
 
     /**
      * 设置请求方式.
-     *
-     * @param $handle
-     * @param $url
-     * @param $params
      */
     private function setCurlUrlMethod($handle, $url, $params)
     {
