@@ -76,7 +76,7 @@ abstract class Channel
      */
     protected function getClassName(): string
     {
-        $className = basename(str_replace('\\', '/', (get_class($this))));
+        $className = basename(str_replace('\\', '/', get_class($this)));
 
         return preg_replace('/Channel/', '', $className);
     }
